@@ -8,14 +8,14 @@ body {
     color: #333333;
 }
 h1 {
-    color: #6a1b9a;
+    color: #49a67c;
 }
 .container {
     width: 400px;
     background-color: #fff;
     padding: 25px;
-    border-radius: 15px; /* 角丸を追加 */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 影を追加 */
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 textarea {
     width: 100%;
@@ -23,17 +23,18 @@ textarea {
     margin-bottom: 15px;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ddd; /* 線の太さを調整 */
-    border-radius: 8px; /* 角丸を追加 */
+    border: 1px solid #ddd;
+    border-radius: 8px;
     box-sizing: border-box;
 }
 #cardPreview {
     width: 100%;
     min-height: 150px;
-    border: 2px solid #6a1b9a; /* ラインを太くして色を変更 */
-    border-radius: 10px; /* 角丸を追加 */
+    border: 2px solid #49a67c;
+    border-radius: 10px;
     position: relative;
     overflow: hidden;
+    margin-bottom: 10px;
 }
 #cardBackground {
     position: absolute;
@@ -58,14 +59,34 @@ button {
     padding: 10px 15px;
     margin: 5px 0;
     cursor: pointer;
-    background-color: #6a1b9a;
+    background-color: #49a67c;
     color: white;
     border: none;
-    border-radius: 25px; /* ボタンを丸く */
+    border-radius: 25px;
     font-weight: bold;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 button:hover {
-    background-color: #4a148c;
+    background-color: #388e3c;
+}
+.templates {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+.template-icon {
+    width: 50px;
+    height: 50px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    object-fit: cover;
+    transition: border-color 0.3s ease;
+}
+.template-icon:hover,
+.template-icon.active {
+    border-color: #49a67c;
 }
