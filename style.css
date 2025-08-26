@@ -23,18 +23,22 @@ textarea {
     margin-bottom: 15px;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ddd;
+    border: 1px solid #49a67c; /* テキスト入力欄の枠線を変更 */
     border-radius: 8px;
     box-sizing: border-box;
 }
 #cardPreview {
     width: 100%;
     min-height: 150px;
-    border: 2px solid #49a67c;
+    border: 1px solid #ddd; /* プレビュー画面の枠線を控えめに */
     border-radius: 10px;
     position: relative;
     overflow: hidden;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 #cardBackground {
     position: absolute;
@@ -46,7 +50,6 @@ textarea {
     object-fit: contain;
 }
 #cardText {
-    white-space: pre-wrap;
     font-size: 16px;
     padding: 10px;
     position: relative;
@@ -54,6 +57,8 @@ textarea {
     color: #333333;
     text-shadow: none;
     background-color: transparent;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 button {
     padding: 10px 15px;
