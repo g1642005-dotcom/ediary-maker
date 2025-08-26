@@ -1,45 +1,18 @@
-body {
-    font-family: "Hiragino Kaku Gothic Pro","メイリオ", sans-serif;
-    display: flex;
-    justify-content: center;
-    padding: 50px;
-    background-color: #f0f0f0;
-}
-.container {
-    width: 400px;
-}
-textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 10px;
-    padding: 10px;
-    font-size: 16px;
-}
-#cardPreview {
-    width: 100%;
-    min-height: 150px;
-    border: 2px solid #333;
-    position: relative;
-    overflow: hidden;
-}
-#cardBackground {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 0; /* テキストの後ろに配置 */
-}
-#cardText {
-    white-space: pre-wrap;
-    font-size: 16px;
-    padding: 10px;
-    position: relative;
-    z-index: 1; /* テキストを前に配置 */
-    color: #333; /* テキストの色を調整 */
-}
-button {
-    padding: 8px 12px;
-    margin: 5px 0;
-    cursor: pointer;
-}
+const diaryInput = document.getElementById("diaryInput");
+const cardText = document.getElementById("cardText");
+const generateBtn = document.getElementById("generateBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+generateBtn.addEventListener("click", () => {
+    cardText.textContent = diaryInput.value;
+});
+
+downloadBtn.addEventListener("click", () => {
+    // プレビューエリア全体をキャプチャ対象にする
+    html2canvas(document.getElementById("cardPreview"), { useCORS: true }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "ediary.png";
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+});
