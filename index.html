@@ -2,61 +2,22 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>絵日記メーカー</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <header>
+    <div class="container">
         <h1>絵日記メーカー</h1>
-        <p>旅や日常の記録をサッと絵日記に</p>
-    </header>
-
-    <main>
-        <div class="card-container">
-            <div id="cardPreview" class="card">
-                <img id="cardBackground" src="images/background1.png" alt="背景" class="card-bg">
-                <div id="character" class="character-draggable"></div>
-                <div class="text-area">
-                    <h2 id="cardTitle"></h2>
-                    <p id="cardDate"></p>
-                    <p id="cardMemo"></p>
-                </div>
-            </div>
+        <textarea id="diaryInput" placeholder="ここに今日の出来事を書いてね"></textarea>
+        <button id="generateBtn">カードを作る</button>
+        <div id="cardPreview">
+            <img id="cardBackground" src="images/background1.png" alt="背景画像">
+            <p id="cardText"></p>
         </div>
-
-        <div class="control-panel">
-            <h3>コントロールパネル</h3>
-            <div class="input-group">
-                <label for="titleInput">タイトル</label>
-                <input type="text" id="titleInput" placeholder="タイトルを入力">
-            </div>
-            <div class="input-group">
-                <label for="dateInput">日付</label>
-                <input type="date" id="dateInput">
-            </div>
-            <div class="input-group">
-                <label for="memoInput">一言メモ</label>
-                <textarea id="memoInput" rows="4" placeholder="一言メモを入力"></textarea>
-            </div>
-
-            <div class="char-select">
-                <h4>キャラクター選択</h4>
-                <img src="images/character1.png" alt="キャラクター1" class="char-icon draggable">
-            </div>
-
-            <div class="action-buttons">
-                <button id="downloadBtn">PNGダウンロード</button>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <p>© 絵日記メーカー</p>
-    </footer>
-
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <button id="downloadBtn">PNGとして保存</button>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
