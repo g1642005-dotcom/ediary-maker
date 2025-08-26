@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>絵日記メーカー</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>絵日記メーカー</h1>
+        <textarea id="diaryInput" placeholder="ここに今日の出来事を書いてね"></textarea>
+        <button id="generateBtn">カードを作る</button>
+        <div id="cardPreview">
+            <img src="images/background1.png" alt="背景" class="card-bg">
+            <p id="cardText"></p>
+        </div>
+        <button id="downloadBtn">PNGとして保存</button>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
