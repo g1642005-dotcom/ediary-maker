@@ -1,24 +1,37 @@
 body {
     font-family: "Hiragino Kaku Gothic Pro", "メイリオ", sans-serif;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     padding: 50px;
-    background-color: #f0f0f0;
+    background-color: #f4f4f9;
+    color: #333333;
+}
+h1 {
+    color: #6a1b9a;
 }
 .container {
     width: 400px;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 15px; /* 角丸を追加 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 影を追加 */
 }
 textarea {
     width: 100%;
     height: 100px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     padding: 10px;
     font-size: 16px;
+    border: 1px solid #ddd; /* 線の太さを調整 */
+    border-radius: 8px; /* 角丸を追加 */
+    box-sizing: border-box;
 }
 #cardPreview {
     width: 100%;
     min-height: 150px;
-    border: 2px solid #333;
+    border: 2px solid #6a1b9a; /* ラインを太くして色を変更 */
+    border-radius: 10px; /* 角丸を追加 */
     position: relative;
     overflow: hidden;
 }
@@ -29,7 +42,6 @@ textarea {
     top: 0;
     left: 0;
     z-index: 0;
-    /* 画像を完全に表示するために追加 */
     object-fit: contain;
 }
 #cardText {
@@ -38,11 +50,22 @@ textarea {
     padding: 10px;
     position: relative;
     z-index: 1;
-    color: #333333; /* 文字色を変更 */
-    text-shadow: none; /* ドロップシャドウを削除 */
+    color: #333333;
+    text-shadow: none;
+    background-color: transparent;
 }
 button {
-    padding: 8px 12px;
+    padding: 10px 15px;
     margin: 5px 0;
     cursor: pointer;
+    background-color: #6a1b9a;
+    color: white;
+    border: none;
+    border-radius: 25px; /* ボタンを丸く */
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #4a148c;
 }
