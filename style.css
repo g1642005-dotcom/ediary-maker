@@ -99,49 +99,49 @@ textarea {
     z-index: 0;
     object-fit: contain; 
 }
-#textContainer {
+#cardPreview.text-layout #textContainer {
     position: absolute;
     z-index: 1;
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 700;
-    color: #333333;
-    width: 71.667%; /* 860px / 1200px */
-    height: 65.833%; /* 790px / 1200px */
-    top: 16.667%; /* 200px / 1200px */
-    left: 14.167%; /* 170px / 1200px */
+    top: 16.67%;
+    left: 14.17%;
+    width: 71.67%;
+    height: 65.83%;
 }
-#cardPreview.img-template #textContainer {
-    width: 71.667%;
-    height: 25%; /* 300px / 1200px */
-    top: 60%; /* 720px / 1200px */
-    left: 14.167%;
+#cardPreview.img-layout #textContainer {
+    position: absolute;
+    z-index: 1;
+    top: 60%;
+    left: 14.17%;
+    width: 71.67%;
+    height: 25%;
 }
 #cardText {
     white-space: pre-wrap;
     width: 100%;
     height: 100%;
-    font-size: 4.167vw; /* 50px / 1200px */
-    line-height: 1.96;
+    font-size: 4.167em;
+    line-height: 1.96em;
     word-break: break-all;
+    font-weight: 700;
 }
-#imageContainer {
+#cardPreview.text-layout #imageContainer {
+    display: none;
+}
+#cardPreview.img-layout #imageContainer {
+    display: flex;
     position: absolute;
     z-index: 2;
     overflow: hidden;
     border: 2px dashed #49a67c;
-    display: none; /* デフォルトは非表示 */
     justify-content: center;
     align-items: center;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
-    width: 71.667%; /* 860px / 1200px */
-    height: 38.333%; /* 460px / 1200px */
-    top: 18.333%; /* 220px / 1200px */
-    left: 14.167%; /* 170px / 1200px */
-}
-#cardPreview.img-template #imageContainer {
-    display: flex; /* imgテンプレート選択時に表示 */
+    top: 18.33%;
+    left: 14.17%;
+    width: 71.67%;
+    height: 38.33%;
 }
 .image-placeholder-text {
     color: #666;
@@ -170,14 +170,6 @@ textarea {
 .primary-btn:hover {
     background-color: #388e3c;
     transform: translateY(-2px);
-}
-#captureContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    opacity: 0;
-    pointer-events: none;
 }
 @media (max-width: 480px) {
     body {
