@@ -105,9 +105,6 @@ textarea {
     white-space: pre-wrap;
     width: 100%;
     height: 100%;
-    /* JavaScriptでスタイルを設定するため、CSSから削除 */
-    /* font-size: 4.17vh; */
-    /* line-height: 1.96em; */
 }
 #imageContainer {
     position: absolute;
