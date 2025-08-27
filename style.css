@@ -102,27 +102,46 @@ textarea {
 #textContainer {
     position: absolute;
     z-index: 1;
-    overflow: hidden;
     font-family: 'Noto Sans JP', sans-serif;
     font-weight: 700;
     color: #333333;
+    width: 71.667%; /* 860px / 1200px */
+    height: 65.833%; /* 790px / 1200px */
+    top: 16.667%; /* 200px / 1200px */
+    left: 14.167%; /* 170px / 1200px */
+}
+#cardPreview.img-template #textContainer {
+    width: 71.667%;
+    height: 25%; /* 300px / 1200px */
+    top: 60%; /* 720px / 1200px */
+    left: 14.167%;
 }
 #cardText {
-    word-break: break-all;
+    white-space: pre-wrap;
     width: 100%;
     height: 100%;
+    font-size: 4.167vw; /* 50px / 1200px */
+    line-height: 1.96;
+    word-break: break-all;
 }
 #imageContainer {
     position: absolute;
     z-index: 2;
     overflow: hidden;
     border: 2px dashed #49a67c;
-    display: flex;
+    display: none; /* デフォルトは非表示 */
     justify-content: center;
     align-items: center;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
+    width: 71.667%; /* 860px / 1200px */
+    height: 38.333%; /* 460px / 1200px */
+    top: 18.333%; /* 220px / 1200px */
+    left: 14.167%; /* 170px / 1200px */
+}
+#cardPreview.img-template #imageContainer {
+    display: flex; /* imgテンプレート選択時に表示 */
 }
 .image-placeholder-text {
     color: #666;
