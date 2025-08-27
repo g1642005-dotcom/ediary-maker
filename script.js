@@ -12,7 +12,6 @@ const imageButtons = document.querySelectorAll(".image-select");
 const imagePlaceholderText = document.querySelector(".image-placeholder-text");
 
 // --- レイアウト設定（座標を元に再計算） ---
-// 提供された座標（1200px四方）からパーセンテージを計算
 const TEXT_TOP = (220 / 1200) * 100 + '%';
 const TEXT_LEFT = (170 / 1200) * 100 + '%';
 const TEXT_WIDTH = (860 / 1200) * 100 + '%';
@@ -133,9 +132,7 @@ function updateTemplate() {
     cardBackground.src = templateFileName;
     const layout = layouts[templateFileName];
 
-    // 画像ありなしの切り替えでコンテナの中身をリセット
     if (selectedType === "img") {
-        // 画像が既にアップロードされていなければ説明文を表示
         if (!imageContainer.querySelector('img')) {
             imageContainer.innerHTML = `<span class="image-placeholder-text">クリックで画像をアップロード</span>`;
         }
