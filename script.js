@@ -40,21 +40,65 @@ templateIcons.forEach(icon => {
         templateIcons.forEach(i => i.classList.remove("active"));
         icon.classList.add("active");
 
-        // "img"を含むテンプレートの場合は画像エリアを表示
+        // テキストと画像のコンテナを初期化
+        textContainer.style.top = '0';
+        textContainer.style.left = '0';
+        textContainer.style.width = '100%';
+        textContainer.style.height = '100%';
+        imageContainer.style.display = 'none';
+
         if (bgImage.includes("-img.png")) {
             imageContainer.style.display = 'block';
-            // 画像エリアの位置とサイズを調整 (例: background1-img用)
-            // この部分は各テンプレートに合わせて調整が必要です
-            if (bgImage.includes("background1-img.png")) {
-                textContainer.style.top = '50%';
-                textContainer.style.left = '5%';
-                textContainer.style.width = '45%';
-                textContainer.style.height = '40%';
 
-                imageContainer.style.top = '10%';
-                imageContainer.style.left = '55%';
-                imageContainer.style.width = '40%';
-                imageContainer.style.height = '40%';
+            // 各テンプレートに合わせた位置調整
+            switch (bgImage) {
+                case "images/background1-img.png":
+                    textContainer.style.top = '50%';
+                    textContainer.style.left = '5%';
+                    textContainer.style.width = '45%';
+                    textContainer.style.height = '40%';
+                    imageContainer.style.top = '10%';
+                    imageContainer.style.left = '55%';
+                    imageContainer.style.width = '40%';
+                    imageContainer.style.height = '40%';
+                    break;
+                case "images/background2-img.png":
+                    textContainer.style.top = '55%';
+                    textContainer.style.left = '10%';
+                    textContainer.style.width = '80%';
+                    textContainer.style.height = '35%';
+                    imageContainer.style.top = '10%';
+                    imageContainer.style.left = '10%';
+                    imageContainer.style.width = '80%';
+                    imageContainer.style.height = '40%';
+                    break;
+                case "images/background3-img.png":
+                    textContainer.style.top = '55%';
+                    textContainer.style.left = '10%';
+                    textContainer.style.width = '80%';
+                    textContainer.style.height = '35%';
+                    imageContainer.style.top = '10%';
+                    imageContainer.style.left = '10%';
+                    imageContainer.style.width = '80%';
+                    imageContainer.style.height = '40%';
+                    break;
+                case "images/background4-img.png":
+                    textContainer.style.top = '40%';
+                    textContainer.style.left = '5%';
+                    textContainer.style.width = '45%';
+                    textContainer.style.height = '50%';
+                    imageContainer.style.top = '5%';
+                    imageContainer.style.left = '50%';
+                    imageContainer.style.width = '45%';
+                    imageContainer.style.height = '30%';
+                    break;
+                default:
+                    // デフォルトの配置（textのみ）
+                    textContainer.style.top = '20%';
+                    textContainer.style.left = '10%';
+                    textContainer.style.width = '80%';
+                    textContainer.style.height = '60%';
+                    break;
             }
         } else {
             // "img"を含まないテンプレートの場合は非表示
