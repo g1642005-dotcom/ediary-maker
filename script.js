@@ -7,53 +7,66 @@ const cardPreview = document.getElementById("cardPreview");
 const textContainer = document.getElementById("textContainer");
 const imageContainer = document.getElementById("imageContainer");
 const imageUpload = document.getElementById("imageUpload");
-const step1Design = document.getElementById("step1-design");
-const step2Image = document.getElementById("step2-image");
 const designButtons = document.querySelectorAll(".design-select");
 const imageButtons = document.querySelectorAll(".image-select");
+const generateBtn = document.getElementById("generateBtn");
 
 // --- レイアウト設定 ---
 const layouts = {
     "default-text": {
-        text: { top: '20%', left: '10%', width: '80%', height: '60%' },
+        text: { top: '20%', left: '10%', width: '80%', height: '60%', textAlign: 'left' },
+        image: { display: 'none' }
+    },
+    "images/background1-text.png": {
+        text: { top: '20%', left: '10%', width: '80%', height: '60%', textAlign: 'left' },
+        image: { display: 'none' }
+    },
+    "images/background2-text.png": {
+        text: { top: '20%', left: '10%', width: '80%', height: '60%', textAlign: 'left' },
+        image: { display: 'none' }
+    },
+    "images/background3-text.png": {
+        text: { top: '20%', left: '10%', width: '80%', height: '60%', textAlign: 'left' },
+        image: { display: 'none' }
+    },
+    "images/background4-text.png": {
+        text: { top: '20%', left: '10%', width: '80%', height: '60%', textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background1-img.png": {
-        text: { top: '50%', left: '5%', width: '45%', height: '40%' },
+        text: { top: '50%', left: '5%', width: '45%', height: '40%', textAlign: 'left' },
         image: { display: 'block', top: '10%', left: '55%', width: '40%', height: '40%', border: '2px dashed #49a67c' }
     },
     "images/background2-img.png": {
-        text: { top: '55%', left: '10%', width: '80%', height: '35%' },
+        text: { top: '55%', left: '10%', width: '80%', height: '35%', textAlign: 'left' },
         image: { display: 'block', top: '10%', left: '10%', width: '80%', height: '40%', border: '2px dashed #49a67c' }
     },
     "images/background3-img.png": {
-        text: { top: '55%', left: '10%', width: '80%', height: '35%' },
+        text: { top: '55%', left: '10%', width: '80%', height: '35%', textAlign: 'left' },
         image: { display: 'block', top: '10%', left: '10%', width: '80%', height: '40%', border: '2px dashed #49a67c' }
     },
     "images/background4-img.png": {
-        text: { top: '40%', left: '5%', width: '45%', height: '50%' },
+        text: { top: '40%', left: '5%', width: '45%', height: '50%', textAlign: 'left' },
         image: { display: 'block', top: '5%', left: '50%', width: '45%', height: '30%', border: '2px dashed #49a67c' }
     }
 };
 
 // --- 変数 ---
-let selectedDesign = null;
-let selectedType = null;
+let selectedDesign = "1"; // 初期値を設定
+let selectedType = "text"; // 初期値を設定
 
 // --- イベントリスナー ---
+// テキスト入力のリアルタイムプレビュー
+generateBtn.addEventListener("click", () => {
+    cardText.textContent = diaryInput.value;
+});
+
 // デザインボタンのクリックイベント
 designButtons.forEach(button => {
     button.addEventListener("click", () => {
-        // activeクラスをリセット
         designButtons.forEach(btn => btn.classList.remove("active"));
         button.classList.add("active");
-
         selectedDesign = button.getAttribute("data-design");
-
-        // 次のステップ（画像有無の選択）を表示
-        step2Image.style.display = 'block';
-
-        // テンプレートを確定
         updateTemplate();
     });
 });
@@ -61,13 +74,9 @@ designButtons.forEach(button => {
 // 画像有無ボタンのクリックイベント
 imageButtons.forEach(button => {
     button.addEventListener("click", () => {
-        // activeクラスをリセット
         imageButtons.forEach(btn => btn.classList.remove("active"));
         button.classList.add("active");
-
         selectedType = button.getAttribute("data-type");
-
-        // テンプレートを確定
         updateTemplate();
     });
 });
@@ -76,13 +85,11 @@ imageButtons.forEach(button => {
 downloadBtn.addEventListener("click", () => {
     cardPreview.style.border = 'none';
     imageContainer.style.border = 'none';
-
     html2canvas(cardPreview, { useCORS: true }).then(canvas => {
         const link = document.createElement("a");
         link.download = "ediary.png";
         link.href = canvas.toDataURL();
         link.click();
-        
         setTimeout(() => {
             cardPreview.style.border = '1px solid #ddd';
             if (imageContainer.style.display === 'block') {
@@ -114,20 +121,30 @@ imageUpload.addEventListener("change", (event) => {
 
 // --- 関数 ---
 function updateTemplate() {
-    if (selectedDesign && selectedType) {
-        const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
-        cardBackground.src = templateFileName;
+    const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
+    cardBackground.src = templateFileName;
 
-        // レイアウト情報を取得
-        let layout;
-        if (selectedType === "img") {
-            layout = layouts[templateFileName];
-        } else {
+    let layout;
+    if (selectedType === "img") {
+        layout = layouts[templateFileName];
+    } else {
+        layout = layouts[`images/background${selectedDesign}-text.png`];
+        if (!layout) {
             layout = layouts["default-text"];
         }
-        
-        // スタイルを適用
-        Object.assign(textContainer.style, layout.text);
-        Object.assign(imageContainer.style, layout.image);
     }
+    
+    // スタイルを適用
+    Object.assign(textContainer.style, layout.text);
+    Object.assign(imageContainer.style, layout.image);
 }
+
+// --- 初期化処理 ---
+// ページ読み込み時に最初のテンプレートをアクティブにする
+if (designButtons.length > 0) {
+    designButtons[0].classList.add("active");
+}
+if (imageButtons.length > 0) {
+    imageButtons[0].classList.add("active");
+}
+updateTemplate();
