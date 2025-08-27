@@ -16,9 +16,9 @@ const captureContainer = document.getElementById("captureContainer");
 const DESIGN_SIZE = 1200;
 
 // プレビュー用オフセット
-const PREVIEW_TOP_OFFSET_PX = 30; // ここを20pxに設定
+const PREVIEW_TOP_OFFSET_PX = 30; // ここを30pxに設定
 // 書き出し用オフセット
-const DOWNLOAD_TOP_OFFSET_PX = 10; // ここを6pxに設定
+const DOWNLOAD_TOP_OFFSET_PX = 10; // ここを10pxに設定
 
 const layouts = {
     "images/background1-text.png": {
@@ -89,38 +89,51 @@ downloadBtn.addEventListener("click", async () => {
         height: cardPreview.style.height,
         position: cardPreview.style.position
     };
-
-    // キャプチャ用に一時的にスタイルを変更
+    
+    // 現在のプレビューのテキスト位置を保存
+    const originalTextTop = textContainer.style.top;
+    
+    // キャプチャ用に一時的にスタイルを変更し、位置情報を統一
     cardPreview.style.width = `${DESIGN_SIZE}px`;
     cardPreview.style.height = `${DESIGN_SIZE}px`;
     cardPreview.style.position = 'fixed';
     cardPreview.style.top = '0';
     cardPreview.style.left = '0';
 
-    // レイアウトの再計算 (書き出し用)
-    updateLayoutForCapture();
-
-    // フォントの読み込みを待つ
+    // ✨ 追加: キャプチャ直前にプレビュー画面を非表示にする
+    cardPreview.style.opacity = '0';
+    
+    // 書き出し用オフセットを適用
+    const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
+    textContainer.style.top = `${layout.text.top - DOWNLOAD_TOP_OFFSET_PX}px`;
+    cardText.style.fontSize = '50px';
+    cardText.style.lineHeight = '1.96em';
+    
     await document.fonts.ready;
-
-    // html2canvasを実行
+    
     html2canvas(cardPreview, {
         useCORS: true,
-        scale: 1
+        scale: 1,
+        // テキストのブレをなくすための設定
+        allowTaint: true,
+        backgroundColor: null
     }).then(canvas => {
         const link = document.createElement("a");
         link.download = "ediary.png";
         link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
-
-        // 元のスタイルに戻す
+        
+        // 元のスタイルとテキスト位置に戻す
         cardPreview.style.width = originalStyle.width;
         cardPreview.style.height = originalStyle.height;
         cardPreview.style.position = originalStyle.position;
         cardPreview.style.top = '';
         cardPreview.style.left = '';
+        textContainer.style.top = originalTextTop; // ここでプレビューの元の位置に戻す
+        
+        // ✨ 追加: 処理後にプレビュー画面を再表示する
+        cardPreview.style.opacity = '1';
 
-        // プレビューのレイアウトを戻す
         updateTemplate();
     });
 });
@@ -144,26 +157,30 @@ imageUpload.addEventListener("change", (event) => {
 });
 
 // --- 関数 ---
-// プレビュー表示用
 function updateTemplate() {
     const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
     cardBackground.src = templateFileName;
-    const previewWidth = cardPreview.offsetWidth;
-
+    
+    // プレビューのサイズ、または書き出し用の固定サイズを取得
+    const currentWidth = cardPreview.offsetWidth;
+    
     const layout = layouts[templateFileName];
-    const scale = previewWidth / DESIGN_SIZE;
-
+    const scale = currentWidth / DESIGN_SIZE;
+    
+    // テキストコンテナの位置とサイズ
     textContainer.style.top = `${(layout.text.top - PREVIEW_TOP_OFFSET_PX) * scale}px`;
     textContainer.style.left = `${layout.text.left * scale}px`;
     textContainer.style.width = `${layout.text.width * scale}px`;
     textContainer.style.height = `${layout.text.height * scale}px`;
     textContainer.style.textAlign = layout.text.textAlign;
-
+    
+    // フォントサイズと行間を同じ比率で計算
     const newFontSize = 50 * scale;
-    const newLineHeight = 98 * scale;
+    const newLineHeight = 1.96; // 98px / 50px = 1.96
     cardText.style.fontSize = newFontSize + 'px';
-    cardText.style.lineHeight = newLineHeight + 'px';
-
+    cardText.style.lineHeight = newLineHeight + 'em';
+    
+    // 画像コンテナの位置とサイズ
     if (selectedType === 'img') {
         imageContainer.style.display = 'flex';
         imageContainer.style.border = layout.image.border;
@@ -171,38 +188,13 @@ function updateTemplate() {
         imageContainer.style.left = `${layout.image.left * scale}px`;
         imageContainer.style.width = `${layout.image.width * scale}px`;
         imageContainer.style.height = `${layout.image.height * scale}px`;
-
+        
         if (!imageContainer.querySelector('img')) {
             imageContainer.innerHTML = `<span class="image-placeholder-text">クリックで画像をアップロード</span>`;
         }
     } else {
         imageContainer.style.display = 'none';
         imageContainer.innerHTML = '';
-    }
-}
-
-// キャプチャ用
-function updateLayoutForCapture() {
-    const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
-
-    textContainer.style.top = `${layout.text.top - DOWNLOAD_TOP_OFFSET_PX}px`;
-    textContainer.style.left = `${layout.text.left}px`;
-    textContainer.style.width = `${layout.text.width}px`;
-    textContainer.style.height = `${layout.text.height}px`;
-    textContainer.style.textAlign = layout.text.textAlign;
-
-    cardText.style.fontSize = '50px';
-    cardText.style.lineHeight = '98px';
-
-    if (selectedType === 'img') {
-        imageContainer.style.display = 'flex';
-        imageContainer.style.border = 'none';
-        imageContainer.style.top = `${layout.image.top}px`;
-        imageContainer.style.left = `${layout.image.left}px`;
-        imageContainer.style.width = `${layout.image.width}px`;
-        imageContainer.style.height = `${layout.image.height}px`;
-    } else {
-        imageContainer.style.display = 'none';
     }
 }
 
