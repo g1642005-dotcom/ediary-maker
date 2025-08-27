@@ -8,8 +8,28 @@
 <body>
     <div class="container">
         <h1>絵日記メーカー</h1>
+
+        <div id="step1-design">
+            <p>1. デザインを選ぶ</p>
+            <div class="selector template-icons">
+                <img src="images/background1-text.png" data-design="1" class="template-icon design-select">
+                <img src="images/background2-text.png" data-design="2" class="template-icon design-select">
+                <img src="images/background3-text.png" data-design="3" class="template-icon design-select">
+                <img src="images/background4-text.png" data-design="4" class="template-icon design-select">
+            </div>
+        </div>
+        <div id="step2-image">
+            <p>2. 画像を入れる？</p>
+            <div class="selector">
+                <button class="image-select" data-type="text">なし</button>
+                <button class="image-select" data-type="img">あり</button>
+            </div>
+        </div>
+
+        <p>3. 日記を書く</p>
         <textarea id="diaryInput" placeholder="ここに今日の出来事を書いてね"></textarea>
         <button id="generateBtn">カードを作る</button>
+        
         <div id="cardPreview">
             <img id="cardBackground" src="images/background1-text.png" alt="背景画像">
             <div id="textContainer">
@@ -17,23 +37,6 @@
             </div>
             <div id="imageContainer"></div>
             <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-        </div>
-
-        <div id="step1-design">
-            <p>1. デザインを選ぶ</p>
-            <div class="selector">
-                <button class="design-select" data-design="1">デザイン1</button>
-                <button class="design-select" data-design="2">デザイン2</button>
-                <button class="design-select" data-design="3">デザイン3</button>
-                <button class="design-select" data-design="4">デザイン4</button>
-            </div>
-        </div>
-        <div id="step2-image" style="display: none;">
-            <p>2. 画像を入れる？</p>
-            <div class="selector">
-                <button class="image-select" data-type="text">なし</button>
-                <button class="image-select" data-type="img">あり</button>
-            </div>
         </div>
 
         <button id="downloadBtn">PNGとして保存</button>
