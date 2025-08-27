@@ -12,51 +12,10 @@ const imageButtons = document.querySelectorAll(".image-select");
 const imagePlaceholderText = document.querySelector(".image-placeholder-text");
 const captureContainer = document.getElementById("captureContainer");
 
-// --- レイアウト設定（座標を元に再計算） ---
-const DESIGN_SIZE = 1200;
-
-// レイアウト座標を調整 (単位: px, 1200x1200基準)
-const layouts = {
-    "images/background1-text.png": {
-        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' },
-        image: { display: 'none' }
-    },
-    "images/background2-text.png": {
-        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' },
-        image: { display: 'none' }
-    },
-    "images/background3-text.png": {
-        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' },
-        image: { display: 'none' }
-    },
-    "images/background4-text.png": {
-        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' },
-        image: { display: 'none' }
-    },
-    "images/background1-img.png": {
-        // 画像とテキストの合計高さ: 460 + 300 = 760px
-        // 縦方向の余白: 1200 - 760 = 440px
-        // 上下の余白: 440 / 2 = 220px
-        text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
-        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
-    },
-    "images/background2-img.png": {
-        text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
-        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
-    },
-    "images/background3-img.png": {
-        text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
-        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
-    },
-    "images/background4-img.png": {
-        text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
-        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
-    }
-};
-
 // --- 変数 ---
 let selectedDesign = "1";
 let selectedType = "text";
+const DESIGN_SIZE = 1200;
 
 // --- イベントリスナー ---
 diaryInput.addEventListener("input", () => {
@@ -82,43 +41,48 @@ imageButtons.forEach(button => {
 });
 
 downloadBtn.addEventListener("click", async () => {
+    // キャプチャ用要素を生成
     const captureElement = cardPreview.cloneNode(true);
     captureElement.id = 'capturePreview';
-    
+    captureElement.classList.add(`${selectedType}-layout`); // CSSクラスをコピー
+
+    // キャプチャ用要素のサイズを固定
     captureElement.style.width = `${DESIGN_SIZE}px`;
     captureElement.style.height = `${DESIGN_SIZE}px`;
-    captureElement.style.position = 'absolute';
-    captureElement.style.top = '0';
-    captureElement.style.left = '0';
-    
+
+    // 背景画像をフルサイズで設定
+    const captureBackground = captureElement.querySelector('#cardBackground');
+    captureBackground.src = `images/background${selectedDesign}-${selectedType}.png`;
+
+    // テキストと画像コンテナのスタイルをダウンロードサイズに調整
     const captureTextContainer = captureElement.querySelector('#textContainer');
-    const captureCardText = captureTextContainer.querySelector('#cardText');
     const captureImageContainer = captureElement.querySelector('#imageContainer');
+    const captureCardText = captureElement.querySelector('#cardText');
 
-    const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
-    
-    captureTextContainer.style.top = `${layout.text.top}px`;
-    captureTextContainer.style.left = `${layout.text.left}px`;
-    captureTextContainer.style.width = `${layout.text.width}px`;
-    captureTextContainer.style.height = `${layout.text.height}px`;
-    captureTextContainer.style.textAlign = layout.text.textAlign;
-    
+    // テキストの位置とサイズを絶対値で設定
+    const textLayout = selectedType === 'text' ?
+        { top: 205, left: 170, width: 860, height: 790 } :
+        { top: 720, left: 170, width: 860, height: 300 };
+
+    captureTextContainer.style.top = `${textLayout.top}px`;
+    captureTextContainer.style.left = `${textLayout.left}px`;
+    captureTextContainer.style.width = `${textLayout.width}px`;
+    captureTextContainer.style.height = `${textLayout.height}px`;
     captureCardText.style.fontSize = '50px';
-    captureCardText.style.lineHeight = '1.96em';
 
+    // 画像コンテナの位置とサイズを絶対値で設定
     if (selectedType === 'img') {
+        const imageLayout = { top: 220, left: 170, width: 860, height: 460 };
         captureImageContainer.style.display = 'flex';
-        captureImageContainer.style.border = layout.image.border;
-        captureImageContainer.style.top = `${layout.image.top}px`;
-        captureImageContainer.style.left = `${layout.image.left}px`;
-        captureImageContainer.style.width = `${layout.image.width}px`;
-        captureImageContainer.style.height = `${layout.image.height}px`;
+        captureImageContainer.style.top = `${imageLayout.top}px`;
+        captureImageContainer.style.left = `${imageLayout.left}px`;
+        captureImageContainer.style.width = `${imageLayout.width}px`;
+        captureImageContainer.style.height = `${imageLayout.height}px`;
     } else {
         captureImageContainer.style.display = 'none';
     }
 
     captureContainer.appendChild(captureElement);
-    
     await document.fonts.ready;
     
     html2canvas(captureElement, {
@@ -133,8 +97,6 @@ downloadBtn.addEventListener("click", async () => {
         link.click();
         
         captureContainer.removeChild(captureElement);
-        
-        updateTemplate();
     });
 });
 
@@ -160,30 +122,15 @@ imageUpload.addEventListener("change", (event) => {
 function updateTemplate() {
     const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
     cardBackground.src = templateFileName;
-    
-    const currentWidth = cardPreview.offsetWidth;
-    const layout = layouts[templateFileName];
-    const scale = currentWidth / DESIGN_SIZE;
-    
-    textContainer.style.top = `${layout.text.top * scale}px`;
-    textContainer.style.left = `${layout.text.left * scale}px`;
-    textContainer.style.width = `${layout.text.width * scale}px`;
-    textContainer.style.height = `${layout.text.height * scale}px`;
-    textContainer.style.textAlign = layout.text.textAlign;
-    
-    const newFontSize = 50 * scale;
-    const newLineHeight = 1.96;
-    cardText.style.fontSize = newFontSize + 'px';
-    cardText.style.lineHeight = newLineHeight + 'em';
-    
+
+    // 画像とテキストの切り替えに合わせてクラスを追加
+    cardPreview.classList.remove('text-layout', 'img-layout');
+    cardPreview.classList.add(`${selectedType}-layout`);
+
+    // 画像あり/なしに応じて画像コンテナの表示を切り替え
     if (selectedType === 'img') {
         imageContainer.style.display = 'flex';
-        imageContainer.style.border = layout.image.border;
-        imageContainer.style.top = `${layout.image.top * scale}px`;
-        imageContainer.style.left = `${layout.image.left * scale}px`;
-        imageContainer.style.width = `${layout.image.width * scale}px`;
-        imageContainer.style.height = `${layout.image.height * scale}px`;
-        
+        imageContainer.style.border = '2px dashed #ccc';
         if (!imageContainer.querySelector('img')) {
             imageContainer.innerHTML = `<span class="image-placeholder-text">クリックで画像をアップロード</span>`;
         }
@@ -202,4 +149,3 @@ if (imageButtons.length > 0) {
 }
 
 updateTemplate();
-window.addEventListener('resize', updateTemplate);
