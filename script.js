@@ -102,11 +102,13 @@ downloadBtn.addEventListener("click", () => {
     const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
 
     // 1200px基準の絶対位置を直接適用
-    cloneTextContainer.style.top = `${layout.text.top - TOP_OFFSET_PX}px`;
+    cloneTextContainer.style.top = `${layout.text.top}px`;
     cloneTextContainer.style.left = `${layout.text.left}px`;
     cloneTextContainer.style.width = `${layout.text.width}px`;
     cloneTextContainer.style.height = `${layout.text.height}px`;
     cloneTextContainer.style.textAlign = layout.text.textAlign;
+    // transformを適用
+    cloneTextContainer.style.transform = `translateY(-${TOP_OFFSET_PX}px)`;
 
     const cloneCardText = previewClone.querySelector('#cardText');
     cloneCardText.textContent = diaryInput.value;
@@ -181,12 +183,13 @@ function updateTemplate() {
     const previewWidth = cardPreview.offsetWidth;
     
     // px単位での位置とサイズを計算し、プレビューに適用
-    const textTopPx = layout.text.top - TOP_OFFSET_PX;
-    textContainer.style.top = `${(textTopPx / DESIGN_SIZE) * 100}%`;
+    textContainer.style.top = `${(layout.text.top / DESIGN_SIZE) * 100}%`;
     textContainer.style.left = `${(layout.text.left / DESIGN_SIZE) * 100}%`;
     textContainer.style.width = `${(layout.text.width / DESIGN_SIZE) * 100}%`;
     textContainer.style.height = `${(layout.text.height / DESIGN_SIZE) * 100}%`;
     textContainer.style.textAlign = layout.text.textAlign;
+    // transformを適用
+    textContainer.style.transform = `translateY(-${(TOP_OFFSET_PX / DESIGN_SIZE) * 100}%)`;
     
     // プレビュー画面の幅に合わせてフォントサイズと行間を再計算
     const newFontSize = (50 / DESIGN_SIZE) * previewWidth;
@@ -203,7 +206,7 @@ function updateTemplate() {
         imageContainer.style.left = `${(layout.image.left / DESIGN_SIZE) * 100}%`;
         imageContainer.style.width = `${(layout.image.width / DESIGN_SIZE) * 100}%`;
         imageContainer.style.height = `${(layout.image.height / DESIGN_SIZE) * 100}%`;
-
+        
         if (!imageContainer.querySelector('img')) {
             imageContainer.innerHTML = `<span class="image-placeholder-text">クリックで画像をアップロード</span>`;
         }
