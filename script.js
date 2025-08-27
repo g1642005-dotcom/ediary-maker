@@ -14,8 +14,7 @@ const captureContainer = document.getElementById("captureContainer");
 
 // --- レイアウト設定（座標を元に再計算） ---
 const DESIGN_SIZE = 1200;
-const PREVIEW_TOP_OFFSET_PX = 30;
-const DOWNLOAD_TOP_OFFSET_PX = 10;
+
 const layouts = {
     "images/background1-text.png": {
         text: { top: 200, left: 170, width: 860, height: 790, textAlign: 'left' },
@@ -35,19 +34,19 @@ const layouts = {
     },
     "images/background1-img.png": {
         text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
-        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #49a67c' }
+        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
     },
     "images/background2-img.png": {
         text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
-        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #49a67c' }
+        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
     },
     "images/background3-img.png": {
         text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
-        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #49a67c' }
+        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
     },
     "images/background4-img.png": {
         text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
-        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #49a67c' }
+        image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
     }
 };
 
@@ -89,24 +88,23 @@ downloadBtn.addEventListener("click", async () => {
     captureElement.style.left = '0';
     
     const captureTextContainer = captureElement.querySelector('#textContainer');
+    const captureCardText = captureTextContainer.querySelector('#cardText');
     const captureImageContainer = captureElement.querySelector('#imageContainer');
 
     const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
     
-    captureTextContainer.style.top = `${layout.text.top - DOWNLOAD_TOP_OFFSET_PX}px`;
+    captureTextContainer.style.top = `${layout.text.top}px`;
     captureTextContainer.style.left = `${layout.text.left}px`;
     captureTextContainer.style.width = `${layout.text.width}px`;
     captureTextContainer.style.height = `${layout.text.height}px`;
     captureTextContainer.style.textAlign = layout.text.textAlign;
     
-    const cardTextElement = captureTextContainer.querySelector('#cardText');
-    cardTextElement.style.fontSize = '50px';
-    cardTextElement.style.lineHeight = '1.96em';
+    captureCardText.style.fontSize = '50px';
+    captureCardText.style.lineHeight = '1.96em';
 
     if (selectedType === 'img') {
         captureImageContainer.style.display = 'flex';
-        // HTML2Canvasが正しくキャプチャできるよう、borderを個別に設定
-        captureImageContainer.style.border = `2px dashed #ccc`;
+        captureImageContainer.style.border = layout.image.border;
         captureImageContainer.style.top = `${layout.image.top}px`;
         captureImageContainer.style.left = `${layout.image.left}px`;
         captureImageContainer.style.width = `${layout.image.width}px`;
@@ -163,7 +161,7 @@ function updateTemplate() {
     const layout = layouts[templateFileName];
     const scale = currentWidth / DESIGN_SIZE;
     
-    textContainer.style.top = `${(layout.text.top - PREVIEW_TOP_OFFSET_PX) * scale}px`;
+    textContainer.style.top = `${layout.text.top * scale}px`;
     textContainer.style.left = `${layout.text.left * scale}px`;
     textContainer.style.width = `${layout.text.width * scale}px`;
     textContainer.style.height = `${layout.text.height * scale}px`;
@@ -176,7 +174,7 @@ function updateTemplate() {
     
     if (selectedType === 'img') {
         imageContainer.style.display = 'flex';
-        imageContainer.style.border = '2px dashed #ccc'; // ここも修正
+        imageContainer.style.border = layout.image.border;
         imageContainer.style.top = `${layout.image.top * scale}px`;
         imageContainer.style.left = `${layout.image.left * scale}px`;
         imageContainer.style.width = `${layout.image.width * scale}px`;
