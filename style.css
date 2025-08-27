@@ -28,7 +28,7 @@ textarea {
     box-sizing: border-box;
 }
 #cardPreview {
-    width: 100%; /* 親要素に幅を合わせる */
+    width: 100%;
     min-height: 150px;
     border: 1px solid #ddd;
     border-radius: 10px;
