@@ -93,7 +93,6 @@ templateIcons.forEach(icon => {
                     imageContainer.style.height = '30%';
                     break;
                 default:
-                    // デフォルトの配置（textのみ）
                     textContainer.style.top = '20%';
                     textContainer.style.left = '10%';
                     textContainer.style.width = '80%';
