@@ -16,8 +16,8 @@ const captureContainer = document.getElementById("captureContainer");
 // 1200px基準のデザインサイズ
 const DESIGN_SIZE = 1200;
 
-// テキスト位置を4px上に調整
-const TOP_OFFSET_PX = 4;
+// テキスト位置を4pxから100pxに調整
+const TOP_OFFSET_PX = 100;
 
 // すべてのレイアウトをpx単位で定義
 const layouts = {
