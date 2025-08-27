@@ -10,17 +10,17 @@ const imageUpload = document.getElementById("imageUpload");
 const designButtons = document.querySelectorAll(".design-select");
 const imageButtons = document.querySelectorAll(".image-select");
 const imagePlaceholderText = document.querySelector(".image-placeholder-text");
+const captureContainer = document.getElementById("captureContainer");
 
 // --- レイアウト設定（座標を元に再計算） ---
 // 1200px基準のデザインサイズ
 const DESIGN_SIZE = 1200;
 
-// テキスト位置を4px上に調整
-const TOP_OFFSET_PX = 4; 
-const TOP_OFFSET_PERCENT = (TOP_OFFSET_PX / DESIGN_SIZE) * 100;
+// テキスト位置を8px上に調整
+const TOP_OFFSET_PX = 8; 
 
 // テキストのみテンプレートの座標
-const TEXT_ONLY_TOP = ((200 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%'; // 200px - 4px
+const TEXT_ONLY_TOP = ((200 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%';
 const TEXT_ONLY_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const TEXT_ONLY_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const TEXT_ONLY_HEIGHT = (790 / DESIGN_SIZE) * 100 + '%';
@@ -31,66 +31,42 @@ const IMAGE_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const IMAGE_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const IMAGE_HEIGHT = (460 / DESIGN_SIZE) * 100 + '%';
 
-const TEXT_WITH_IMAGE_TOP = ((720 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%'; // 720px - 4px
+const TEXT_WITH_IMAGE_TOP = ((720 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_HEIGHT = (300 / DESIGN_SIZE) * 100 + '%';
 
 const layouts = {
     "images/background1-text.png": {
-        text: { 
-            top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
-            textAlign: 'left'
-        },
+        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background2-text.png": {
-        text: { 
-            top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
-            textAlign: 'left'
-        },
+        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background3-text.png": {
-        text: { 
-            top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
-            textAlign: 'left'
-        },
+        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background4-text.png": {
-        text: { 
-            top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
-            textAlign: 'left'
-        },
+        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background1-img.png": {
-        text: { 
-            top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
-            textAlign: 'left'
-        },
+        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background2-img.png": {
-        text: { 
-            top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
-            textAlign: 'left'
-        },
+        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background3-img.png": {
-        text: { 
-            top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
-            textAlign: 'left'
-        },
+        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background4-img.png": {
-        text: { 
-            top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
-            textAlign: 'left'
-        },
+        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     }
 };
@@ -123,57 +99,76 @@ imageButtons.forEach(button => {
 });
 
 downloadBtn.addEventListener("click", () => {
-    cardPreview.style.border = 'none';
-    imageContainer.style.border = 'none';
-    if (imagePlaceholderText) {
-        imagePlaceholderText.style.display = 'none';
-    }
+    // キャプチャ用の要素を動的に作成
+    const captureElement = document.createElement('div');
+    captureElement.id = 'capturePreview';
+    captureElement.style.width = `${DESIGN_SIZE}px`;
+    captureElement.style.height = `${DESIGN_SIZE}px`;
+    captureElement.style.position = 'relative';
+    captureElement.style.overflow = 'hidden';
+
+    // 背景画像をコピー
+    const captureBackground = document.createElement('img');
+    captureBackground.src = cardBackground.src;
+    captureBackground.style.position = 'absolute';
+    captureBackground.style.width = '100%';
+    captureBackground.style.height = '100%';
+    captureBackground.style.objectFit = 'contain';
+    captureElement.appendChild(captureBackground);
     
-    // html2canvasでキャプチャする際、一時的にcardPreviewの幅を1200pxにする
-    // これにより、フォントサイズが相対的に正しくなる
-    const originalPreviewWidth = cardPreview.style.width;
-    const originalTextContainerTop = textContainer.style.top; // テキストコンテナの現在のtopを保存
+    // テキストコンテナをコピーし、1200px基準のスタイルを適用
+    const captureTextContainer = document.createElement('div');
+    const textLayout = layouts[`images/background${selectedDesign}-${selectedType}.png`].text;
+    captureTextContainer.style.position = 'absolute';
+    captureTextContainer.style.top = (selectedType === 'img' ? 720 : 200) - TOP_OFFSET_PX + 'px';
+    captureTextContainer.style.left = '170px';
+    captureTextContainer.style.width = '860px';
+    captureTextContainer.style.height = '300px';
+    captureTextContainer.style.fontFamily = `'Noto Sans JP', sans-serif`;
+    captureTextContainer.style.fontWeight = '700';
+    captureTextContainer.style.fontSize = '50px';
+    captureTextContainer.style.lineHeight = '98px';
+    captureTextContainer.style.whiteSpace = 'pre-wrap';
+    captureTextContainer.style.textAlign = 'left';
+    captureTextContainer.textContent = diaryInput.value;
+    captureElement.appendChild(captureTextContainer);
 
-    // テキストの位置を1200px基準で再計算（4pxオフセットを反映）
-    const tempTextTopPx = (selectedType === 'img' ? 720 : 200) - TOP_OFFSET_PX;
-    textContainer.style.top = (tempTextTopPx / DESIGN_SIZE) * 100 + '%';
+    // 画像コンテナをコピーし、1200px基準のスタイルを適用
+    const captureImageContainer = document.createElement('div');
+    const imageLayout = layouts[`images/background${selectedDesign}-${selectedType}.png`].image;
+    if (imageLayout.display !== 'none') {
+        captureImageContainer.style.position = 'absolute';
+        captureImageContainer.style.top = '220px';
+        captureImageContainer.style.left = '170px';
+        captureImageContainer.style.width = '860px';
+        captureImageContainer.style.height = '460px';
+        if (imageContainer.querySelector('img')) {
+            const img = imageContainer.querySelector('img').cloneNode();
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            captureImageContainer.appendChild(img);
+        }
+        captureElement.appendChild(captureImageContainer);
+    }
 
-    cardPreview.style.width = '1200px'; 
-    cardPreview.style.height = '1200px'; // 高さに合わせて調整
+    // 作成した要素を一時的にbodyに追加
+    document.body.appendChild(captureElement);
 
-    // フォントサイズも1200px基準の50px、行間98pxに設定
-    cardText.style.fontSize = '50px';
-    cardText.style.lineHeight = '98px';
-
-
-    html2canvas(cardPreview, { 
+    html2canvas(captureElement, {
         useCORS: true, 
-        // スケールは1で、width/heightで指定したサイズでキャプチャ
+        width: DESIGN_SIZE, 
+        height: DESIGN_SIZE,
         scale: 1,
-        width: 1200,
-        height: 1200
+        removeContainer: true
     }).then(canvas => {
         const link = document.createElement("a");
         link.download = "ediary.png";
         link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
         
-        // 元のプレビュー状態に戻す
-        cardPreview.style.width = originalPreviewWidth;
-        cardPreview.style.height = ''; // heightをautoに戻すか、元の値に戻す
-        textContainer.style.top = originalTextContainerTop; // 元のtopに戻す
-
-        updateTemplate(); // フォントサイズをプレビュー用に再計算
-        
-        setTimeout(() => {
-            cardPreview.style.border = '1px solid #ddd';
-            if (imageContainer.style.display === 'flex') {
-                imageContainer.style.border = '2px dashed #49a67c';
-                if (imageContainer.querySelector('img') === null && imagePlaceholderText) {
-                    imagePlaceholderText.style.display = 'block';
-                }
-            }
-        }, 300);
+        // キャプチャ用要素をbodyから削除
+        document.body.removeChild(captureElement);
     });
 });
 
@@ -200,6 +195,10 @@ function updateTemplate() {
     const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
     cardBackground.src = templateFileName;
     const layout = layouts[templateFileName];
+    
+    // 画像コンテナの表示/非表示を切り替え
+    imageContainer.style.display = layout.image.display;
+    imageContainer.style.border = layout.image.border;
 
     if (selectedType === "img") {
         if (!imageContainer.querySelector('img')) {
@@ -209,15 +208,12 @@ function updateTemplate() {
         imageContainer.innerHTML = '';
     }
     
-    // テキストコンテナのスタイルを設定
     Object.assign(textContainer.style, layout.text);
-    // 画像コンテナのスタイルを設定
     Object.assign(imageContainer.style, layout.image);
     
-    // プレビュー画面の幅に合わせてフォントサイズと行間を再計算
     const previewWidth = cardPreview.offsetWidth;
-    const newFontSize = (50 / DESIGN_SIZE) * previewWidth; // 1200px基準の50pxを現在のプレビュー幅に比例
-    const newLineHeight = (98 / 50); // フォントサイズに対するem単位
+    const newFontSize = (50 / DESIGN_SIZE) * previewWidth;
+    const newLineHeight = (98 / 50);
     
     cardText.style.fontSize = newFontSize + 'px';
     cardText.style.lineHeight = newLineHeight + 'em';
