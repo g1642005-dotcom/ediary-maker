@@ -29,7 +29,8 @@ textarea {
 }
 #cardPreview {
     width: 100%;
-    min-height: 150px;
+    /* プレビューの縦横比を固定 */
+    aspect-ratio: 1 / 1.1; 
     border: 1px solid #ddd;
     border-radius: 10px;
     position: relative;
@@ -43,10 +44,11 @@ textarea {
     top: 0;
     left: 0;
     z-index: 0;
-    object-fit: cover;
+    object-fit: contain;
 }
 #textContainer {
     position: absolute;
+    /* この値を調整してテキストエリアの位置を変更 */
     width: 80%;
     height: 60%;
     top: 20%;
@@ -60,10 +62,10 @@ textarea {
     width: 100%;
     height: 100%;
     color: #333333;
-    text-align: left;
 }
 #imageContainer {
     position: absolute;
+    /* この値を調整して画像エリアの位置を変更 */
     width: 60%;
     height: 30%;
     top: 5%;
@@ -71,7 +73,7 @@ textarea {
     z-index: 2;
     overflow: hidden;
     border: 2px dashed #49a67c;
-    display: none;
+    display: none; /* デフォルトでは非表示 */
 }
 button {
     padding: 10px 15px;
