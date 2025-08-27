@@ -17,19 +17,19 @@ const DESIGN_SIZE = 1200;
 
 const layouts = {
     "images/background1-text.png": {
-        text: { top: 200, left: 170, width: 860, height: 790, textAlign: 'left' },
+        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' }, // 修正
         image: { display: 'none' }
     },
     "images/background2-text.png": {
-        text: { top: 200, left: 170, width: 860, height: 790, textAlign: 'left' },
+        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' }, // 修正
         image: { display: 'none' }
     },
     "images/background3-text.png": {
-        text: { top: 200, left: 170, width: 860, height: 790, textAlign: 'left' },
+        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' }, // 修正
         image: { display: 'none' }
     },
     "images/background4-text.png": {
-        text: { top: 200, left: 170, width: 860, height: 790, textAlign: 'left' },
+        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' }, // 修正
         image: { display: 'none' }
     },
     "images/background1-img.png": {
