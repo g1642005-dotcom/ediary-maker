@@ -13,13 +13,13 @@ const imagePlaceholderText = document.querySelector(".image-placeholder-text");
 const captureContainer = document.getElementById("captureContainer");
 
 // --- レイアウト設定（座標を元に再計算） ---
-// 1200px基準のデザインサイズ
 const DESIGN_SIZE = 1200;
 
-// テキスト位置を100px上に調整
-const TOP_OFFSET_PX = 100;
+// プレビュー用オフセット
+const PREVIEW_TOP_OFFSET_PX = 100;
+// 書き出し用オフセット
+const DOWNLOAD_TOP_OFFSET_PX = 4;
 
-// すべてのレイアウトをpx単位で定義
 const layouts = {
     "images/background1-text.png": {
         text: { top: 200, left: 170, width: 860, height: 790, textAlign: 'left' },
@@ -83,64 +83,28 @@ imageButtons.forEach(button => {
 });
 
 downloadBtn.addEventListener("click", async () => {
+    // 現在のプレビューのスタイルを保存
+    const originalStyle = {
+        width: cardPreview.style.width,
+        height: cardPreview.style.height,
+        position: cardPreview.style.position
+    };
+
+    // キャプチャ用に一時的にスタイルを変更
+    cardPreview.style.width = `${DESIGN_SIZE}px`;
+    cardPreview.style.height = `${DESIGN_SIZE}px`;
+    cardPreview.style.position = 'fixed';
+    cardPreview.style.top = '0';
+    cardPreview.style.left = '0';
+
+    // レイアウトの再計算 (書き出し用)
+    updateLayoutForCapture();
+    
     // フォントの読み込みを待つ
     await document.fonts.ready;
     
-    // キャプチャ用コンテナの準備
-    captureContainer.style.width = `${DESIGN_SIZE}px`;
-    captureContainer.style.height = `${DESIGN_SIZE}px`;
-
-    // プレビューのHTMLをキャプチャ用コンテナに複製
-    const previewClone = cardPreview.cloneNode(true);
-    previewClone.id = 'capturePreview';
-    previewClone.style.width = '100%';
-    previewClone.style.height = '100%';
-    previewClone.style.border = 'none';
-
-    // クローンされた要素内のスタイルを1200px基準に修正
-    const cloneCardBackground = previewClone.querySelector('#cardBackground');
-    cloneCardBackground.src = cardBackground.src;
-    
-    const cloneTextContainer = previewClone.querySelector('#textContainer');
-    const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
-
-    // 1200px基準の絶対位置を直接適用
-    cloneTextContainer.style.top = `${layout.text.top - TOP_OFFSET_PX}px`;
-    cloneTextContainer.style.left = `${layout.text.left}px`;
-    cloneTextContainer.style.width = `${layout.text.width}px`;
-    cloneTextContainer.style.height = `${layout.text.height}px`;
-    cloneTextContainer.style.textAlign = layout.text.textAlign;
-
-    const cloneCardText = previewClone.querySelector('#cardText');
-    cloneCardText.textContent = diaryInput.value;
-    cloneCardText.style.fontSize = '50px';
-    cloneCardText.style.lineHeight = '98px';
-
-    const cloneImageContainer = previewClone.querySelector('#imageContainer');
-    if (layout.image.display === 'flex') {
-        cloneImageContainer.style.top = `${layout.image.top}px`;
-        cloneImageContainer.style.left = `${layout.image.left}px`;
-        cloneImageContainer.style.width = `${layout.image.width}px`;
-        cloneImageContainer.style.height = `${layout.image.height}px`;
-        cloneImageContainer.style.display = 'flex';
-        cloneImageContainer.style.border = 'none';
-
-        if (imageContainer.querySelector('img')) {
-            const img = imageContainer.querySelector('img').cloneNode();
-            cloneImageContainer.innerHTML = '';
-            cloneImageContainer.appendChild(img);
-        } else {
-            cloneImageContainer.innerHTML = '';
-        }
-    } else {
-        cloneImageContainer.style.display = 'none';
-    }
-
-    captureContainer.innerHTML = '';
-    captureContainer.appendChild(previewClone);
-
-    // html2canvasを非表示のコンテナに対して実行
-    html2canvas(captureContainer, { 
+    // html2canvasを実行
+    html2canvas(cardPreview, { 
         useCORS: true, 
         scale: 1
     }).then(canvas => {
@@ -149,10 +113,15 @@ downloadBtn.addEventListener("click", async () => {
         link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
         
-        // キャプチャ用コンテナをクリーンアップ
-        captureContainer.innerHTML = '';
-        captureContainer.style.width = '';
-        captureContainer.style.height = '';
+        // 元のスタイルに戻す
+        cardPreview.style.width = originalStyle.width;
+        cardPreview.style.height = originalStyle.height;
+        cardPreview.style.position = originalStyle.position;
+        cardPreview.style.top = '';
+        cardPreview.style.left = '';
+        
+        // プレビューのレイアウトを戻す
+        updateTemplate();
     });
 });
 
@@ -175,39 +144,33 @@ imageUpload.addEventListener("change", (event) => {
 });
 
 // --- 関数 ---
+// プレビュー表示用
 function updateTemplate() {
     const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
     cardBackground.src = templateFileName;
-    const layout = layouts[templateFileName];
-    
-    // プレビュー画面の幅を取得
     const previewWidth = cardPreview.offsetWidth;
     
-    // px単位での位置とサイズを計算し、プレビューに適用
-    textContainer.style.top = `${(layout.text.top / DESIGN_SIZE) * 100}%`;
-    textContainer.style.left = `${(layout.text.left / DESIGN_SIZE) * 100}%`;
-    textContainer.style.width = `${(layout.text.width / DESIGN_SIZE) * 100}%`;
-    textContainer.style.height = `${(layout.text.height / DESIGN_SIZE) * 100}%`;
+    const layout = layouts[templateFileName];
+    const scale = previewWidth / DESIGN_SIZE;
+    
+    textContainer.style.top = `${(layout.text.top - PREVIEW_TOP_OFFSET_PX) * scale}px`;
+    textContainer.style.left = `${layout.text.left * scale}px`;
+    textContainer.style.width = `${layout.text.width * scale}px`;
+    textContainer.style.height = `${layout.text.height * scale}px`;
     textContainer.style.textAlign = layout.text.textAlign;
-    
-    // transformを適用
-    textContainer.style.transform = `translateY(-${(TOP_OFFSET_PX / DESIGN_SIZE) * 100}%)`;
-    
-    // プレビュー画面の幅に合わせてフォントサイズと行間を再計算
-    const newFontSize = (50 / DESIGN_SIZE) * previewWidth;
-    const newLineHeight = (98 / 50);
-    
+
+    const newFontSize = 50 * scale;
+    const newLineHeight = 98 * scale;
     cardText.style.fontSize = newFontSize + 'px';
-    cardText.style.lineHeight = newLineHeight + 'em';
+    cardText.style.lineHeight = newLineHeight + 'px';
     
-    // 画像コンテナの位置も同様に計算
     if (selectedType === 'img') {
         imageContainer.style.display = 'flex';
         imageContainer.style.border = layout.image.border;
-        imageContainer.style.top = `${(layout.image.top / DESIGN_SIZE) * 100}%`;
-        imageContainer.style.left = `${(layout.image.left / DESIGN_SIZE) * 100}%`;
-        imageContainer.style.width = `${(layout.image.width / DESIGN_SIZE) * 100}%`;
-        imageContainer.style.height = `${(layout.image.height / DESIGN_SIZE) * 100}%`;
+        imageContainer.style.top = `${layout.image.top * scale}px`;
+        imageContainer.style.left = `${layout.image.left * scale}px`;
+        imageContainer.style.width = `${layout.image.width * scale}px`;
+        imageContainer.style.height = `${layout.image.height * scale}px`;
         
         if (!imageContainer.querySelector('img')) {
             imageContainer.innerHTML = `<span class="image-placeholder-text">クリックで画像をアップロード</span>`;
@@ -218,6 +181,31 @@ function updateTemplate() {
     }
 }
 
+// キャプチャ用
+function updateLayoutForCapture() {
+    const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
+    
+    textContainer.style.top = `${layout.text.top - DOWNLOAD_TOP_OFFSET_PX}px`;
+    textContainer.style.left = `${layout.text.left}px`;
+    textContainer.style.width = `${layout.text.width}px`;
+    textContainer.style.height = `${layout.text.height}px`;
+    textContainer.style.textAlign = layout.text.textAlign;
+    
+    cardText.style.fontSize = '50px';
+    cardText.style.lineHeight = '98px';
+
+    if (selectedType === 'img') {
+        imageContainer.style.display = 'flex';
+        imageContainer.style.border = 'none';
+        imageContainer.style.top = `${layout.image.top}px`;
+        imageContainer.style.left = `${layout.image.left}px`;
+        imageContainer.style.width = `${layout.image.width}px`;
+        imageContainer.style.height = `${layout.image.height}px`;
+    } else {
+        imageContainer.style.display = 'none';
+    }
+}
+
 // --- 初期化処理 ---
 if (designButtons.length > 0) {
     designButtons[0].classList.add("active");
@@ -225,4 +213,6 @@ if (designButtons.length > 0) {
 if (imageButtons.length > 0) {
     imageButtons[0].classList.add("active");
 }
+
 updateTemplate();
+window.addEventListener('resize', updateTemplate);
