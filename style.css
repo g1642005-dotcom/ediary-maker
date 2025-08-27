@@ -110,7 +110,6 @@ textarea {
     height: 100%;
     word-break: break-all;
     font-weight: 700;
-    font-size: 4.167vw; /* プレビューサイズに合わせる */
     line-height: 1.96em;
 }
 #imageContainer {
@@ -164,20 +163,20 @@ textarea {
 
 /* レイアウトごとの位置とサイズをCSSで定義 */
 #cardPreview.text-layout #textContainer {
-    top: 17.08%;  /* (205 / 1200) * 100 */
-    left: 14.17%; /* (170 / 1200) * 100 */
-    width: 71.67%; /* (860 / 1200) * 100 */
-    height: 65.83%; /* (790 / 1200) * 100 */
-}
-#cardPreview.img-layout #imageContainer {
-    top: 18.33%;  /* (220 / 1200) * 100 */
-    left: 14.17%; /* (170 / 1200) * 100 */
-    width: 71.67%; /* (860 / 1200) * 100 */
-    height: 38.33%; /* (460 / 1200) * 100 */
-}
-#cardPreview.img-layout #textContainer {
-    top: 60%; /* (720 / 1200) * 100 */
+    top: 17.08%;
     left: 14.17%;
     width: 71.67%;
-    height: 25%; /* (300 / 1200) * 100 */
+    height: 65.83%;
+}
+#cardPreview.img-layout #imageContainer {
+    top: 18.33%;
+    left: 14.17%;
+    width: 71.67%;
+    height: 38.33%;
+}
+#cardPreview.img-layout #textContainer {
+    top: 60%;
+    left: 14.17%;
+    width: 71.67%;
+    height: 25%;
 }
