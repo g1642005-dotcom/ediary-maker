@@ -11,16 +11,13 @@ const designButtons = document.querySelectorAll(".design-select");
 const imageButtons = document.querySelectorAll(".image-select");
 const imagePlaceholderText = document.querySelector(".image-placeholder-text");
 const captureContainer = document.getElementById("captureContainer");
-// 警告メッセージの要素を取得
 const wordCountMessage = document.getElementById("wordCountMessage");
 const lineCountMessage = document.getElementById("lineCountMessage");
 
 // --- レイアウト設定（座標を元に再計算） ---
 const DESIGN_SIZE = 1200;
 
-// プレビュー用オフセット
 const PREVIEW_TOP_OFFSET_PX = 30;
-// 書き出し用オフセット
 const DOWNLOAD_TOP_OFFSET_PX = 10;
 
 const layouts = {
@@ -64,7 +61,8 @@ let selectedType = "text";
 
 // --- イベントリスナー ---
 diaryInput.addEventListener("input", () => {
-    let lines = diaryInput.value.split('\n');
+    let inputText = diaryInput.value;
+    let lines = inputText.split('\n');
     let maxLines = 0;
     let maxCharsPerLine = 0;
     
@@ -76,28 +74,33 @@ diaryInput.addEventListener("input", () => {
         maxCharsPerLine = 17;
     }
 
-    // 文字数・行数チェックとメッセージ表示
-    let displayText = '';
     wordCountMessage.textContent = '';
     lineCountMessage.textContent = '';
     
-    // 行数制限
+    // 行数制限のチェック
     if (lines.length > maxLines) {
         lineCountMessage.textContent = `最大${maxLines}行まで入力できます`;
-        lines = lines.slice(0, maxLines);
+        diaryInput.value = lines.slice(0, maxLines).join('\n');
     }
     
-    // 文字数制限
+    // 各行の文字数制限のチェック
+    let truncatedLines = [];
+    let isTruncated = false;
     for (let i = 0; i < lines.length; i++) {
         if (lines[i].length > maxCharsPerLine) {
             wordCountMessage.textContent = `1行は${maxCharsPerLine}文字までです`;
-            lines[i] = lines[i].substring(0, maxCharsPerLine);
+            truncatedLines.push(lines[i].substring(0, maxCharsPerLine));
+            isTruncated = true;
+        } else {
+            truncatedLines.push(lines[i]);
         }
     }
     
-    // プレビューを更新
-    displayText = lines.join('\n');
-    cardText.textContent = displayText;
+    if (isTruncated) {
+        diaryInput.value = truncatedLines.join('\n');
+    }
+    
+    cardText.textContent = diaryInput.value;
 });
 
 designButtons.forEach(button => {
@@ -105,7 +108,6 @@ designButtons.forEach(button => {
         designButtons.forEach(btn => btn.classList.remove("active"));
         button.classList.add("active");
         selectedDesign = button.getAttribute("data-design");
-        // テンプレートが変わった際に入力欄をクリア
         diaryInput.value = '';
         cardText.textContent = '';
         wordCountMessage.textContent = '';
@@ -119,7 +121,6 @@ imageButtons.forEach(button => {
         imageButtons.forEach(btn => btn.classList.remove("active"));
         button.classList.add("active");
         selectedType = button.getAttribute("data-type");
-        // テンプレートが変わった際に入力欄をクリア
         diaryInput.value = '';
         cardText.textContent = '';
         wordCountMessage.textContent = '';
@@ -129,27 +130,22 @@ imageButtons.forEach(button => {
 });
 
 downloadBtn.addEventListener("click", async () => {
-    // 現在のプレビューのスタイルを保存
     const originalStyle = {
         width: cardPreview.style.width,
         height: cardPreview.style.height,
         position: cardPreview.style.position
     };
     
-    // 現在のプレビューのテキスト位置を保存
     const originalTextTop = textContainer.style.top;
     
-    // キャプチャ用に一時的にスタイルを変更し、位置情報を統一
     cardPreview.style.width = `${DESIGN_SIZE}px`;
     cardPreview.style.height = `${DESIGN_SIZE}px`;
     cardPreview.style.position = 'fixed';
     cardPreview.style.top = '0';
     cardPreview.style.left = '0';
 
-    // キャプチャ直前にプレビュー画面を非表示にする
     cardPreview.style.opacity = '0';
     
-    // 書き出し用オフセットを適用
     const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
     textContainer.style.top = `${layout.text.top - DOWNLOAD_TOP_OFFSET_PX}px`;
     cardText.style.fontSize = '50px';
@@ -160,7 +156,6 @@ downloadBtn.addEventListener("click", async () => {
     html2canvas(cardPreview, {
         useCORS: true,
         scale: 1,
-        // テキストのブレをなくすための設定
         allowTaint: true,
         backgroundColor: null
     }).then(canvas => {
@@ -169,15 +164,13 @@ downloadBtn.addEventListener("click", async () => {
         link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
         
-        // 元のスタイルとテキスト位置に戻す
         cardPreview.style.width = originalStyle.width;
         cardPreview.style.height = originalStyle.height;
         cardPreview.style.position = originalStyle.position;
         cardPreview.style.top = '';
         cardPreview.style.left = '';
-        textContainer.style.top = originalTextTop; // ここでプレビューの元の位置に戻す
+        textContainer.style.top = originalTextTop;
         
-        // 処理後にプレビュー画面を再表示する
         cardPreview.style.opacity = '1';
 
         updateTemplate();
@@ -207,26 +200,22 @@ function updateTemplate() {
     const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
     cardBackground.src = templateFileName;
     
-    // プレビューのサイズ、または書き出し用の固定サイズを取得
     const currentWidth = cardPreview.offsetWidth;
     
     const layout = layouts[templateFileName];
     const scale = currentWidth / DESIGN_SIZE;
     
-    // テキストコンテナの位置とサイズ
     textContainer.style.top = `${(layout.text.top - PREVIEW_TOP_OFFSET_PX) * scale}px`;
     textContainer.style.left = `${layout.text.left * scale}px`;
     textContainer.style.width = `${layout.text.width * scale}px`;
     textContainer.style.height = `${layout.text.height * scale}px`;
     textContainer.style.textAlign = layout.text.textAlign;
     
-    // フォントサイズと行間を同じ比率で計算
     const newFontSize = 50 * scale;
-    const newLineHeight = 1.96; // 98px / 50px = 1.96
+    const newLineHeight = 1.96;
     cardText.style.fontSize = newFontSize + 'px';
     cardText.style.lineHeight = newLineHeight + 'em';
     
-    // 画像コンテナの位置とサイズ
     if (selectedType === 'img') {
         imageContainer.style.display = 'flex';
         imageContainer.style.border = layout.image.border;
