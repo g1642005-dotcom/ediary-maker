@@ -11,6 +11,9 @@ const designButtons = document.querySelectorAll(".design-select");
 const imageButtons = document.querySelectorAll(".image-select");
 const imagePlaceholderText = document.querySelector(".image-placeholder-text");
 const captureContainer = document.getElementById("captureContainer");
+// 警告メッセージの要素を取得
+const wordCountMessage = document.getElementById("wordCountMessage");
+const lineCountMessage = document.getElementById("lineCountMessage");
 
 // --- レイアウト設定（座標を元に再計算） ---
 const DESIGN_SIZE = 1200;
@@ -61,45 +64,52 @@ let selectedType = "text";
 
 // --- イベントリスナー ---
 diaryInput.addEventListener("input", () => {
-    let inputText = diaryInput.value.replace(/\n/g, ''); // 既存の改行を削除
-    let newText = '';
+    let lines = diaryInput.value.split('\n');
     let maxLines = 0;
+    let maxCharsPerLine = 0;
     
-    // 選択されたタイプに応じて行数制限を動的に変更
     if (selectedType === 'text') {
         maxLines = 8;
+        maxCharsPerLine = 17;
     } else if (selectedType === 'img') {
         maxLines = 3;
+        maxCharsPerLine = 17;
     }
 
-    // 17文字ごとに改行を挿入
-    for (let i = 0; i < inputText.length; i += 17) {
-        newText += inputText.substring(i, i + 17);
-        // 最終行でなければ改行を挿入
-        if (i + 17 < inputText.length) {
-            newText += '\n';
+    // 文字数・行数チェックとメッセージ表示
+    let displayText = '';
+    wordCountMessage.textContent = '';
+    lineCountMessage.textContent = '';
+    
+    // 行数制限
+    if (lines.length > maxLines) {
+        lineCountMessage.textContent = `最大${maxLines}行まで入力できます`;
+        lines = lines.slice(0, maxLines);
+    }
+    
+    // 文字数制限
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].length > maxCharsPerLine) {
+            wordCountMessage.textContent = `1行は${maxCharsPerLine}文字までです`;
+            lines[i] = lines[i].substring(0, maxCharsPerLine);
         }
     }
     
-    // 行数制限
-    let lines = newText.split('\n');
-    if (lines.length > maxLines) {
-        lines = lines.slice(0, maxLines);
-        newText = lines.join('\n');
-        // 警告メッセージ（任意）
-        console.warn(`入力できるのは${maxLines}行までです。`);
-    }
-
-    diaryInput.value = newText;
-    cardText.textContent = newText;
+    // プレビューを更新
+    displayText = lines.join('\n');
+    cardText.textContent = displayText;
 });
-
 
 designButtons.forEach(button => {
     button.addEventListener("click", () => {
         designButtons.forEach(btn => btn.classList.remove("active"));
         button.classList.add("active");
         selectedDesign = button.getAttribute("data-design");
+        // テンプレートが変わった際に入力欄をクリア
+        diaryInput.value = '';
+        cardText.textContent = '';
+        wordCountMessage.textContent = '';
+        lineCountMessage.textContent = '';
         updateTemplate();
     });
 });
@@ -109,6 +119,11 @@ imageButtons.forEach(button => {
         imageButtons.forEach(btn => btn.classList.remove("active"));
         button.classList.add("active");
         selectedType = button.getAttribute("data-type");
+        // テンプレートが変わった際に入力欄をクリア
+        diaryInput.value = '';
+        cardText.textContent = '';
+        wordCountMessage.textContent = '';
+        lineCountMessage.textContent = '';
         updateTemplate();
     });
 });
@@ -216,4 +231,26 @@ function updateTemplate() {
         imageContainer.style.display = 'flex';
         imageContainer.style.border = layout.image.border;
         imageContainer.style.top = `${layout.image.top * scale}px`;
-        imageContainer.style.left = `${layout.image.left * scale
+        imageContainer.style.left = `${layout.image.left * scale}px`;
+        imageContainer.style.width = `${layout.image.width * scale}px`;
+        imageContainer.style.height = `${layout.image.height * scale}px`;
+        
+        if (!imageContainer.querySelector('img')) {
+            imageContainer.innerHTML = `<span class="image-placeholder-text">クリックで画像をアップロード</span>`;
+        }
+    } else {
+        imageContainer.style.display = 'none';
+        imageContainer.innerHTML = '';
+    }
+}
+
+// --- 初期化処理 ---
+if (designButtons.length > 0) {
+    designButtons[0].classList.add("active");
+}
+if (imageButtons.length > 0) {
+    imageButtons[0].classList.add("active");
+}
+
+updateTemplate();
+window.addEventListener('resize', updateTemplate);
