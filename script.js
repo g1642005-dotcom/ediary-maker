@@ -6,13 +6,15 @@ const cardBackground = document.getElementById("cardBackground");
 const cardPreview = document.getElementById("cardPreview");
 const textContainer = document.getElementById("textContainer");
 const imageContainer = document.getElementById("imageContainer");
-const templateIcons = document.querySelectorAll(".template-icon");
-const imageUpload = document.getElementById("imageUpload"); // HTMLで追加した要素を取得
+const imageUpload = document.getElementById("imageUpload");
+const step1Design = document.getElementById("step1-design");
+const step2Image = document.getElementById("step2-image");
+const designButtons = document.querySelectorAll(".design-select");
+const imageButtons = document.querySelectorAll(".image-select");
 
 // --- レイアウト設定 ---
-// 各テンプレートのテキストと画像の位置をオブジェクトとして管理
 const layouts = {
-    "default-text": { // textのみのテンプレートの共通設定
+    "default-text": {
         text: { top: '20%', left: '10%', width: '80%', height: '60%' },
         image: { display: 'none' }
     },
@@ -34,20 +36,46 @@ const layouts = {
     }
 };
 
+// --- 変数 ---
+let selectedDesign = null;
+let selectedType = null;
 
-// --- イベントリスナーの設定 ---
+// --- イベントリスナー ---
+// デザインボタンのクリックイベント
+designButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        // activeクラスをリセット
+        designButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
 
-// 【② リアルタイムプレビュー】テキスト入力を即座にプレビューに反映
-diaryInput.addEventListener("input", () => {
-    cardText.textContent = diaryInput.value;
+        selectedDesign = button.getAttribute("data-design");
+
+        // 次のステップ（画像有無の選択）を表示
+        step2Image.style.display = 'block';
+
+        // テンプレートを確定
+        updateTemplate();
+    });
 });
 
+// 画像有無ボタンのクリックイベント
+imageButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        // activeクラスをリセット
+        imageButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
 
-// 【PNGとして保存】
+        selectedType = button.getAttribute("data-type");
+
+        // テンプレートを確定
+        updateTemplate();
+    });
+});
+
+// PNGとして保存
 downloadBtn.addEventListener("click", () => {
-    // 保存時に枠線を一時的に消す
     cardPreview.style.border = 'none';
-    imageContainer.style.border = 'none'; // 画像エリアの枠線も消す
+    imageContainer.style.border = 'none';
 
     html2canvas(cardPreview, { useCORS: true }).then(canvas => {
         const link = document.createElement("a");
@@ -55,10 +83,8 @@ downloadBtn.addEventListener("click", () => {
         link.href = canvas.toDataURL();
         link.click();
         
-        // 少し待ってから枠線を元に戻す
         setTimeout(() => {
             cardPreview.style.border = '1px solid #ddd';
-            // 現在のテンプレートが画像付きの場合のみ、枠線を戻す
             if (imageContainer.style.display === 'block') {
                 imageContainer.style.border = '2px dashed #49a67c';
             }
@@ -66,36 +92,6 @@ downloadBtn.addEventListener("click", () => {
     });
 });
 
-
-// 【③ テンプレート切り替え（リファクタリング版）】
-templateIcons.forEach(icon => {
-    icon.addEventListener("click", () => {
-        const bgImage = icon.getAttribute("data-bg");
-        cardBackground.src = bgImage;
-
-        // すべてのアイコンから active クラスを削除
-        templateIcons.forEach(i => i.classList.remove("active"));
-        // クリックされたアイコンに active クラスを追加
-        icon.classList.add("active");
-
-        // レイアウト情報を取得
-        let layout;
-        if (bgImage.includes("-img.png")) {
-            // "img" が含まれる場合は、対応するレイアウトを使用
-            layout = layouts[bgImage];
-        } else {
-            // "text" のみの場合は、共通のデフォルトレイアウトを使用
-            layout = layouts["default-text"];
-        }
-        
-        // スタイルを適用
-        Object.assign(textContainer.style, layout.text);
-        Object.assign(imageContainer.style, layout.image);
-    });
-});
-
-
-// 【① 画像アップロード機能】
 // 画像コンテナをクリックしたら、ファイル選択ダイアログを開く
 imageContainer.addEventListener("click", () => {
     imageUpload.click();
@@ -107,7 +103,6 @@ imageUpload.addEventListener("change", (event) => {
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            // 既存の画像を削除してから新しい画像を追加
             imageContainer.innerHTML = ''; 
             const img = document.createElement('img');
             img.src = e.target.result;
@@ -117,10 +112,22 @@ imageUpload.addEventListener("change", (event) => {
     }
 });
 
+// --- 関数 ---
+function updateTemplate() {
+    if (selectedDesign && selectedType) {
+        const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
+        cardBackground.src = templateFileName;
 
-// --- 初期化処理 ---
-
-// ページ読み込み時に最初のテンプレートをアクティブにする
-if (templateIcons.length > 0) {
-    templateIcons[0].click(); // click() を実行して初期レイアウトも適用する
+        // レイアウト情報を取得
+        let layout;
+        if (selectedType === "img") {
+            layout = layouts[templateFileName];
+        } else {
+            layout = layouts["default-text"];
+        }
+        
+        // スタイルを適用
+        Object.assign(textContainer.style, layout.text);
+        Object.assign(imageContainer.style, layout.image);
+    }
 }
