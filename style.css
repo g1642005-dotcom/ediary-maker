@@ -83,6 +83,7 @@ textarea {
     position: relative;
     overflow: hidden;
     margin-bottom: 10px;
+    box-sizing: border-box; /* 修正箇所 */
 }
 #cardBackground {
     position: absolute;
