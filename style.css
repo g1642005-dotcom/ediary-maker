@@ -108,7 +108,7 @@ textarea {
     color: #333333;
 }
 #cardText {
-    white-space: pre-wrap;
+    word-break: break-all;
     width: 100%;
     height: 100%;
 }
