@@ -28,8 +28,7 @@ textarea {
     box-sizing: border-box;
 }
 #cardPreview {
-    /* 幅を100%に設定して親要素に合わせる */
-    width: 100%; 
+    width: 100%; /* 親要素に幅を合わせる */
     min-height: 150px;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -44,8 +43,7 @@ textarea {
     top: 0;
     left: 0;
     z-index: 0;
-    /* 画像をコンテナに収めるように変更 */
-    object-fit: contain; 
+    object-fit: contain;
 }
 #textContainer {
     position: absolute;
