@@ -1,5 +1,6 @@
 body {
-    font-family: "Hiragino Kaku Gothic Pro", "メイリオ", sans-serif;
+    /* フォント指定をNoto Sans JPに変更 */
+    font-family: 'Noto Sans JP', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,7 +37,6 @@ h1 {
     background-color: #49a67c;
     color: white;
 }
-
 .template-icons {
     display: flex;
     justify-content: space-between;
@@ -73,6 +73,8 @@ textarea {
     border: 1px solid #49a67c;
     border-radius: 8px;
     box-sizing: border-box;
+    /* textareaはユーザーのOSフォントを使うことが多いので、指定は最小限に */
+    font-family: inherit;
 }
 #cardPreview {
     width: 100%;
@@ -95,26 +97,22 @@ textarea {
 }
 #textContainer {
     position: absolute;
-    width: 80%;
-    height: 60%;
-    top: 20%;
-    left: 10%;
     z-index: 1;
     overflow: hidden;
 }
 #cardText {
     white-space: pre-wrap;
-    font-size: 16px;
     width: 100%;
     height: 100%;
     color: #333333;
+    /* フォントスタイルを適用 */
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 700; /* boldの代わりに700を使う */
+    font-size: 50px;
+    line-height: 98px;
 }
 #imageContainer {
     position: absolute;
-    width: 60%;
-    height: 35%;
-    top: 15%;
-    left: 20%;
     z-index: 2;
     overflow: hidden;
     border: 2px dashed #49a67c;
