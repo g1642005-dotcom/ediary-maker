@@ -15,24 +15,28 @@ const captureContainer = document.getElementById("captureContainer");
 // --- レイアウト設定（座標を元に再計算） ---
 const DESIGN_SIZE = 1200;
 
+// レイアウト座標を調整 (単位: px, 1200x1200基準)
 const layouts = {
     "images/background1-text.png": {
-        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' }, // 修正
+        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background2-text.png": {
-        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' }, // 修正
+        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background3-text.png": {
-        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' }, // 修正
+        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background4-text.png": {
-        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' }, // 修正
+        text: { top: 205, left: 170, width: 860, height: 790, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background1-img.png": {
+        // 画像とテキストの合計高さ: 460 + 300 = 760px
+        // 縦方向の余白: 1200 - 760 = 440px
+        // 上下の余白: 440 / 2 = 220px
         text: { top: 720, left: 170, width: 860, height: 300, textAlign: 'left' },
         image: { top: 220, left: 170, width: 860, height: 460, display: 'flex', border: '2px dashed #ccc' }
     },
