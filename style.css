@@ -29,6 +29,9 @@ textarea {
 }
 #cardPreview {
     width: 100%;
+    /* ここに余白を追加しました */
+    margin-top: 20px; 
+    
     /* プレビューの縦横比を固定 */
     aspect-ratio: 1 / 1.1; 
     border: 1px solid #ddd;
@@ -44,11 +47,11 @@ textarea {
     top: 0;
     left: 0;
     z-index: 0;
-    object-fit: contain;
+    /* 画像の比率を保つように変更しました */
+    object-fit: contain; 
 }
 #textContainer {
     position: absolute;
-    /* この値を調整してテキストエリアの位置を変更 */
     width: 80%;
     height: 60%;
     top: 20%;
@@ -65,7 +68,6 @@ textarea {
 }
 #imageContainer {
     position: absolute;
-    /* この値を調整して画像エリアの位置を変更 */
     width: 60%;
     height: 30%;
     top: 5%;
@@ -73,7 +75,7 @@ textarea {
     z-index: 2;
     overflow: hidden;
     border: 2px dashed #49a67c;
-    display: none; /* デフォルトでは非表示 */
+    display: none; 
 }
 button {
     padding: 10px 15px;
