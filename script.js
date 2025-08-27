@@ -44,7 +44,7 @@ downloadBtn.addEventListener("click", async () => {
     // キャプチャ用要素を生成
     const captureElement = cardPreview.cloneNode(true);
     captureElement.id = 'capturePreview';
-    captureElement.classList.add(`${selectedType}-layout`); // CSSクラスをコピー
+    captureElement.classList.add(`${selectedType}-layout`);
 
     // キャプチャ用要素のサイズを固定
     captureElement.style.width = `${DESIGN_SIZE}px`;
@@ -68,6 +68,8 @@ downloadBtn.addEventListener("click", async () => {
     captureTextContainer.style.left = `${textLayout.left}px`;
     captureTextContainer.style.width = `${textLayout.width}px`;
     captureTextContainer.style.height = `${textLayout.height}px`;
+    
+    // ダウンロード時のフォントサイズを50pxに固定
     captureCardText.style.fontSize = '50px';
 
     // 画像コンテナの位置とサイズを絶対値で設定
@@ -127,6 +129,13 @@ function updateTemplate() {
     cardPreview.classList.remove('text-layout', 'img-layout');
     cardPreview.classList.add(`${selectedType}-layout`);
 
+    // プレビュー画像の幅に応じてフォントサイズを計算
+    const currentWidth = cardPreview.offsetWidth;
+    const baseFontSize = 50;
+    const scale = currentWidth / DESIGN_SIZE;
+    const newFontSize = baseFontSize * scale;
+    cardText.style.fontSize = `${newFontSize}px`;
+
     // 画像あり/なしに応じて画像コンテナの表示を切り替え
     if (selectedType === 'img') {
         imageContainer.style.display = 'flex';
@@ -149,3 +158,4 @@ if (imageButtons.length > 0) {
 }
 
 updateTemplate();
+window.addEventListener('resize', updateTemplate);
