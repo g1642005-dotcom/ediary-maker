@@ -105,7 +105,8 @@ downloadBtn.addEventListener("click", async () => {
 
     if (selectedType === 'img') {
         captureImageContainer.style.display = 'flex';
-        captureImageContainer.style.border = layout.image.border;
+        // HTML2Canvasが正しくキャプチャできるよう、borderを個別に設定
+        captureImageContainer.style.border = `2px dashed #ccc`;
         captureImageContainer.style.top = `${layout.image.top}px`;
         captureImageContainer.style.left = `${layout.image.left}px`;
         captureImageContainer.style.width = `${layout.image.width}px`;
@@ -175,7 +176,7 @@ function updateTemplate() {
     
     if (selectedType === 'img') {
         imageContainer.style.display = 'flex';
-        imageContainer.style.border = layout.image.border;
+        imageContainer.style.border = '2px dashed #ccc'; // ここも修正
         imageContainer.style.top = `${layout.image.top * scale}px`;
         imageContainer.style.left = `${layout.image.left * scale}px`;
         imageContainer.style.width = `${layout.image.width * scale}px`;
