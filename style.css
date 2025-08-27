@@ -160,23 +160,3 @@ textarea {
     opacity: 0;
     pointer-events: none;
 }
-
-/* レイアウトごとの位置とサイズをCSSで定義 */
-#cardPreview.text-layout #textContainer {
-    top: 17.08%;
-    left: 14.17%;
-    width: 71.67%;
-    height: 65.83%;
-}
-#cardPreview.img-layout #imageContainer {
-    top: 18.33%;
-    left: 14.17%;
-    width: 71.67%;
-    height: 38.33%;
-}
-#cardPreview.img-layout #textContainer {
-    top: 60%;
-    left: 14.17%;
-    width: 71.67%;
-    height: 25%;
-}
