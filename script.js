@@ -15,8 +15,12 @@ const imagePlaceholderText = document.querySelector(".image-placeholder-text");
 // 1200px基準のデザインサイズ
 const DESIGN_SIZE = 1200;
 
+// テキスト位置を4px上に調整
+const TOP_OFFSET_PX = 4; 
+const TOP_OFFSET_PERCENT = (TOP_OFFSET_PX / DESIGN_SIZE) * 100;
+
 // テキストのみテンプレートの座標
-const TEXT_ONLY_TOP = (200 / DESIGN_SIZE) * 100 + '%';
+const TEXT_ONLY_TOP = ((200 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%'; // 200px - 4px
 const TEXT_ONLY_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const TEXT_ONLY_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const TEXT_ONLY_HEIGHT = (790 / DESIGN_SIZE) * 100 + '%';
@@ -27,7 +31,7 @@ const IMAGE_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const IMAGE_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const IMAGE_HEIGHT = (460 / DESIGN_SIZE) * 100 + '%';
 
-const TEXT_WITH_IMAGE_TOP = (720 / DESIGN_SIZE) * 100 + '%';
+const TEXT_WITH_IMAGE_TOP = ((720 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%'; // 720px - 4px
 const TEXT_WITH_IMAGE_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_HEIGHT = (300 / DESIGN_SIZE) * 100 + '%';
@@ -125,22 +129,42 @@ downloadBtn.addEventListener("click", () => {
         imagePlaceholderText.style.display = 'none';
     }
     
-    // PNG書き出し用のフォントサイズと行間を一時的に設定
+    // html2canvasでキャプチャする際、一時的にcardPreviewの幅を1200pxにする
+    // これにより、フォントサイズが相対的に正しくなる
+    const originalPreviewWidth = cardPreview.style.width;
+    const originalTextContainerTop = textContainer.style.top; // テキストコンテナの現在のtopを保存
+
+    // テキストの位置を1200px基準で再計算（4pxオフセットを反映）
+    const tempTextTopPx = (selectedType === 'img' ? 720 : 200) - TOP_OFFSET_PX;
+    textContainer.style.top = (tempTextTopPx / DESIGN_SIZE) * 100 + '%';
+
+    cardPreview.style.width = '1200px'; 
+    cardPreview.style.height = '1200px'; // 高さに合わせて調整
+
+    // フォントサイズも1200px基準の50px、行間98pxに設定
     cardText.style.fontSize = '50px';
     cardText.style.lineHeight = '98px';
-    
+
+
     html2canvas(cardPreview, { 
         useCORS: true, 
-        scale: 1
+        // スケールは1で、width/heightで指定したサイズでキャプチャ
+        scale: 1,
+        width: 1200,
+        height: 1200
     }).then(canvas => {
         const link = document.createElement("a");
         link.download = "ediary.png";
         link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
         
-        // 元のプレビュー用のスタイルに戻す
-        updateTemplate();
+        // 元のプレビュー状態に戻す
+        cardPreview.style.width = originalPreviewWidth;
+        cardPreview.style.height = ''; // heightをautoに戻すか、元の値に戻す
+        textContainer.style.top = originalTextContainerTop; // 元のtopに戻す
 
+        updateTemplate(); // フォントサイズをプレビュー用に再計算
+        
         setTimeout(() => {
             cardPreview.style.border = '1px solid #ddd';
             if (imageContainer.style.display === 'flex') {
@@ -185,13 +209,15 @@ function updateTemplate() {
         imageContainer.innerHTML = '';
     }
     
+    // テキストコンテナのスタイルを設定
     Object.assign(textContainer.style, layout.text);
+    // 画像コンテナのスタイルを設定
     Object.assign(imageContainer.style, layout.image);
     
     // プレビュー画面の幅に合わせてフォントサイズと行間を再計算
     const previewWidth = cardPreview.offsetWidth;
-    const newFontSize = (50 / 1200) * previewWidth;
-    const newLineHeight = (98 / 50);
+    const newFontSize = (50 / DESIGN_SIZE) * previewWidth; // 1200px基準の50pxを現在のプレビュー幅に比例
+    const newLineHeight = (98 / 50); // フォントサイズに対するem単位
     
     cardText.style.fontSize = newFontSize + 'px';
     cardText.style.lineHeight = newLineHeight + 'em';
