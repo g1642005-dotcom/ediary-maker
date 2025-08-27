@@ -52,7 +52,7 @@ h1 {
     border: 2px solid transparent;
     border-radius: 5px;
     cursor: pointer;
-    object-fit: contain;
+    object-fit: contain; 
     transition: border-color 0.3s ease;
 }
 .template-icon:hover,
