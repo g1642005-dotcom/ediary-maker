@@ -6,13 +6,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>絵日記メーカー</h1>
-
+        
         <div id="step1-design">
             <p>1. デザインを選ぶ</p>
             <div class="selector template-icons">
@@ -32,6 +32,8 @@
 
         <p>3. 日記を書く</p>
         <textarea id="diaryInput" placeholder="ここに今日の出来事を書いてね"></textarea>
+        <p id="wordCountMessage" class="message"></p>
+        <p id="lineCountMessage" class="message"></p>
 
         <div id="cardPreview">
             <img id="cardBackground" src="images/background1-text.png" alt="背景画像">
