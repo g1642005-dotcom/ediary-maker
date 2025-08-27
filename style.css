@@ -8,7 +8,7 @@ body {
     color: #333333;
 }
 h1 {
-    color: #49a67c;
+    color: #F07676; /* 修正 */
 }
 .container {
     width: 400px;
@@ -33,7 +33,7 @@ h1 {
     transition: background-color 0.3s ease;
 }
 .selector button.active {
-    background-color: #49a67c;
+    background-color: #F07676; /* 修正 */
     color: white;
 }
 .template-icons {
@@ -57,7 +57,7 @@ h1 {
 }
 .template-icon:hover,
 .template-icon.active {
-    border-color: #49a67c;
+    border-color: #F07676; /* 修正 */
 }
 p {
     margin-top: 10px;
@@ -69,7 +69,7 @@ textarea {
     margin-bottom: 15px;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #49a67c;
+    border: 1px solid #F07676; /* 修正 */
     border-radius: 8px;
     box-sizing: border-box;
     font-family: inherit;
@@ -83,7 +83,7 @@ textarea {
     position: relative;
     overflow: hidden;
     margin-bottom: 10px;
-    box-sizing: border-box; /* 修正箇所 */
+    box-sizing: border-box;
 }
 #cardBackground {
     position: absolute;
@@ -111,7 +111,7 @@ textarea {
     position: absolute;
     z-index: 2;
     overflow: hidden;
-    border: 2px dashed #49a67c;
+    border: 2px dashed #F07676; /* 修正 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -135,7 +135,7 @@ textarea {
     padding: 12px 20px;
     margin: 15px 0;
     cursor: pointer;
-    background-color: #49a67c;
+    background-color: #F07676; /* 修正 */
     color: white;
     border: none;
     border-radius: 25px;
@@ -144,7 +144,7 @@ textarea {
     transition: background-color 0.3s ease, transform 0.1s ease;
 }
 .primary-btn:hover {
-    background-color: #388e3c;
+    background-color: #d15656; /* 修正 */
     transform: translateY(-2px);
 }
 #captureContainer {
