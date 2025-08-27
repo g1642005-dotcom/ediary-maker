@@ -23,7 +23,7 @@ downloadBtn.addEventListener("click", () => {
         link.download = "ediary.png";
         link.href = canvas.toDataURL();
         link.click();
-        
+
         setTimeout(() => {
             cardPreview.style.border = '1px solid #ddd';
             imageContainer.style.border = '2px dashed #49a67c';
@@ -40,7 +40,6 @@ templateIcons.forEach(icon => {
         templateIcons.forEach(i => i.classList.remove("active"));
         icon.classList.add("active");
 
-        // テキストと画像のコンテナを初期化
         textContainer.style.top = '0';
         textContainer.style.left = '0';
         textContainer.style.width = '100%';
@@ -50,7 +49,6 @@ templateIcons.forEach(icon => {
         if (bgImage.includes("-img.png")) {
             imageContainer.style.display = 'block';
 
-            // 各テンプレートに合わせた位置調整
             switch (bgImage) {
                 case "images/background1-img.png":
                     textContainer.style.top = '50%';
@@ -103,7 +101,6 @@ templateIcons.forEach(icon => {
     });
 });
 
-// 最初のテンプレートをアクティブにする
 if (templateIcons.length > 0) {
     templateIcons[0].classList.add("active");
 }
