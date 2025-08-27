@@ -188,6 +188,7 @@ function updateTemplate() {
     textContainer.style.width = `${(layout.text.width / DESIGN_SIZE) * 100}%`;
     textContainer.style.height = `${(layout.text.height / DESIGN_SIZE) * 100}%`;
     textContainer.style.textAlign = layout.text.textAlign;
+    
     // transformを適用
     textContainer.style.transform = `translateY(-${(TOP_OFFSET_PX / DESIGN_SIZE) * 100}%)`;
     
