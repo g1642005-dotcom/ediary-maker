@@ -16,8 +16,8 @@ const captureContainer = document.getElementById("captureContainer");
 // 1200px基準のデザインサイズ
 const DESIGN_SIZE = 1200;
 
-// テキスト位置を8px上に調整
-const TOP_OFFSET_PX = 8; 
+// テキスト位置を4px上に調整
+const TOP_OFFSET_PX = 4;
 
 // テキストのみテンプレートの座標
 const TEXT_ONLY_TOP = ((200 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%';
@@ -99,76 +99,54 @@ imageButtons.forEach(button => {
 });
 
 downloadBtn.addEventListener("click", () => {
-    // キャプチャ用の要素を動的に作成
-    const captureElement = document.createElement('div');
-    captureElement.id = 'capturePreview';
-    captureElement.style.width = `${DESIGN_SIZE}px`;
-    captureElement.style.height = `${DESIGN_SIZE}px`;
-    captureElement.style.position = 'relative';
-    captureElement.style.overflow = 'hidden';
+    // キャプチャ用コンテナの準備
+    captureContainer.style.width = `${DESIGN_SIZE}px`;
+    captureContainer.style.height = `${DESIGN_SIZE}px`;
 
-    // 背景画像をコピー
-    const captureBackground = document.createElement('img');
-    captureBackground.src = cardBackground.src;
-    captureBackground.style.position = 'absolute';
-    captureBackground.style.width = '100%';
-    captureBackground.style.height = '100%';
-    captureBackground.style.objectFit = 'contain';
-    captureElement.appendChild(captureBackground);
+    // プレビューのHTMLをキャプチャ用コンテナに複製
+    const previewClone = cardPreview.cloneNode(true);
+    // クローンされた要素内のスタイルを1200px基準に修正
+    const cloneCardBackground = previewClone.querySelector('#cardBackground');
+    cloneCardBackground.src = cardBackground.src;
     
-    // テキストコンテナをコピーし、1200px基準のスタイルを適用
-    const captureTextContainer = document.createElement('div');
-    const textLayout = layouts[`images/background${selectedDesign}-${selectedType}.png`].text;
-    captureTextContainer.style.position = 'absolute';
-    captureTextContainer.style.top = (selectedType === 'img' ? 720 : 200) - TOP_OFFSET_PX + 'px';
-    captureTextContainer.style.left = '170px';
-    captureTextContainer.style.width = '860px';
-    captureTextContainer.style.height = '300px';
-    captureTextContainer.style.fontFamily = `'Noto Sans JP', sans-serif`;
-    captureTextContainer.style.fontWeight = '700';
-    captureTextContainer.style.fontSize = '50px';
-    captureTextContainer.style.lineHeight = '98px';
-    captureTextContainer.style.whiteSpace = 'pre-wrap';
-    captureTextContainer.style.textAlign = 'left';
-    captureTextContainer.textContent = diaryInput.value;
-    captureElement.appendChild(captureTextContainer);
+    const cloneTextContainer = previewClone.querySelector('#textContainer');
+    Object.assign(cloneTextContainer.style, layouts[`images/background${selectedDesign}-${selectedType}.png`].text);
+    cloneTextContainer.style.top = `calc(${cloneTextContainer.style.top} - ${TOP_OFFSET_PX}px)`;
 
-    // 画像コンテナをコピーし、1200px基準のスタイルを適用
-    const captureImageContainer = document.createElement('div');
-    const imageLayout = layouts[`images/background${selectedDesign}-${selectedType}.png`].image;
-    if (imageLayout.display !== 'none') {
-        captureImageContainer.style.position = 'absolute';
-        captureImageContainer.style.top = '220px';
-        captureImageContainer.style.left = '170px';
-        captureImageContainer.style.width = '860px';
-        captureImageContainer.style.height = '460px';
-        if (imageContainer.querySelector('img')) {
-            const img = imageContainer.querySelector('img').cloneNode();
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            captureImageContainer.appendChild(img);
-        }
-        captureElement.appendChild(captureImageContainer);
+    const cloneCardText = previewClone.querySelector('#cardText');
+    cloneCardText.textContent = diaryInput.value;
+    cloneCardText.style.fontSize = '50px';
+    cloneCardText.style.lineHeight = '98px';
+    
+    // 画像コンテナのスタイルと内容をコピー
+    const cloneImageContainer = previewClone.querySelector('#imageContainer');
+    Object.assign(cloneImageContainer.style, layouts[`images/background${selectedDesign}-${selectedType}.png`].image);
+    cloneImageContainer.style.border = 'none';
+    if (imageContainer.querySelector('img')) {
+        const img = imageContainer.querySelector('img').cloneNode();
+        cloneImageContainer.innerHTML = '';
+        cloneImageContainer.appendChild(img);
+    } else {
+        cloneImageContainer.innerHTML = '';
     }
 
-    // 作成した要素を一時的にbodyに追加
-    document.body.appendChild(captureElement);
+    captureContainer.innerHTML = '';
+    captureContainer.appendChild(previewClone);
 
-    html2canvas(captureElement, {
+    // html2canvasを非表示のコンテナに対して実行
+    html2canvas(captureContainer, { 
         useCORS: true, 
-        width: DESIGN_SIZE, 
-        height: DESIGN_SIZE,
         scale: 1,
-        removeContainer: true
     }).then(canvas => {
         const link = document.createElement("a");
         link.download = "ediary.png";
         link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
         
-        // キャプチャ用要素をbodyから削除
-        document.body.removeChild(captureElement);
+        // キャプチャ用コンテナをクリーンアップ
+        captureContainer.innerHTML = '';
+        captureContainer.style.width = '';
+        captureContainer.style.height = '';
     });
 });
 
