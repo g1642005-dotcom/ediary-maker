@@ -146,6 +146,11 @@ textarea {
     background-color: #388e3c;
     transform: translateY(-2px);
 }
+#captureContainer {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
 @media (max-width: 480px) {
     body {
         padding: 10px;
