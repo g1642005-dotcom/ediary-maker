@@ -10,6 +10,7 @@ const imageUpload = document.getElementById("imageUpload");
 const designButtons = document.querySelectorAll(".design-select");
 const imageButtons = document.querySelectorAll(".image-select");
 const generateBtn = document.getElementById("generateBtn");
+const imagePlaceholderText = document.querySelector(".image-placeholder-text"); // 説明文要素を取得
 
 // --- レイアウト設定 ---
 const layouts = {
@@ -18,7 +19,7 @@ const layouts = {
         image: { display: 'none' }
     },
     "images/background1-text.png": {
-        text: { top: '20%', left: '10%', width: '80%', height: '60%', textAlign: 'left' },
+        text: { top: '30%', left: '15%', width: '70%', height: '50%', textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background2-text.png": {
@@ -30,38 +31,36 @@ const layouts = {
         image: { display: 'none' }
     },
     "images/background4-text.png": {
-        text: { top: '20%', left: '10%', width: '80%', height: '60%', textAlign: 'left' },
+        text: { top: '30%', left: '10%', width: '80%', height: '60%', textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background1-img.png": {
-        text: { top: '50%', left: '5%', width: '45%', height: '40%', textAlign: 'left' },
-        image: { display: 'block', top: '10%', left: '55%', width: '40%', height: '40%', border: '2px dashed #49a67c' }
+        text: { top: '65%', left: '10%', width: '80%', height: '25%', textAlign: 'left' },
+        image: { display: 'flex', top: '15%', left: '20%', width: '60%', height: '35%', border: '2px dashed #49a67c' } // display: 'flex'に変更
     },
     "images/background2-img.png": {
-        text: { top: '55%', left: '10%', width: '80%', height: '35%', textAlign: 'left' },
-        image: { display: 'block', top: '10%', left: '10%', width: '80%', height: '40%', border: '2px dashed #49a67c' }
+        text: { top: '65%', left: '10%', width: '80%', height: '25%', textAlign: 'left' },
+        image: { display: 'flex', top: '15%', left: '20%', width: '60%', height: '35%', border: '2px dashed #49a67c' }
     },
     "images/background3-img.png": {
-        text: { top: '55%', left: '10%', width: '80%', height: '35%', textAlign: 'left' },
-        image: { display: 'block', top: '10%', left: '10%', width: '80%', height: '40%', border: '2px dashed #49a67c' }
+        text: { top: '65%', left: '10%', width: '80%', height: '25%', textAlign: 'left' },
+        image: { display: 'flex', top: '15%', left: '20%', width: '60%', height: '35%', border: '2px dashed #49a67c' }
     },
     "images/background4-img.png": {
-        text: { top: '40%', left: '5%', width: '45%', height: '50%', textAlign: 'left' },
-        image: { display: 'block', top: '5%', left: '50%', width: '45%', height: '30%', border: '2px dashed #49a67c' }
+        text: { top: '65%', left: '10%', width: '80%', height: '25%', textAlign: 'left' },
+        image: { display: 'flex', top: '15%', left: '20%', width: '60%', height: '35%', border: '2px dashed #49a67c' }
     }
 };
 
 // --- 変数 ---
-let selectedDesign = "1"; // 初期値を設定
-let selectedType = "text"; // 初期値を設定
+let selectedDesign = "1";
+let selectedType = "text";
 
 // --- イベントリスナー ---
-// テキスト入力のリアルタイムプレビュー
 generateBtn.addEventListener("click", () => {
     cardText.textContent = diaryInput.value;
 });
 
-// デザインボタンのクリックイベント
 designButtons.forEach(button => {
     button.addEventListener("click", () => {
         designButtons.forEach(btn => btn.classList.remove("active"));
@@ -71,7 +70,6 @@ designButtons.forEach(button => {
     });
 });
 
-// 画像有無ボタンのクリックイベント
 imageButtons.forEach(button => {
     button.addEventListener("click", () => {
         imageButtons.forEach(btn => btn.classList.remove("active"));
@@ -85,14 +83,14 @@ imageButtons.forEach(button => {
 downloadBtn.addEventListener("click", () => {
     cardPreview.style.border = 'none';
     imageContainer.style.border = 'none';
-    html2canvas(cardPreview, { useCORS: true }).then(canvas => {
+    html2canvas(cardPreview, { useCORS: true, width: 1200, height: 1200 }).then(canvas => {
         const link = document.createElement("a");
         link.download = "ediary.png";
         link.href = canvas.toDataURL();
         link.click();
         setTimeout(() => {
             cardPreview.style.border = '1px solid #ddd';
-            if (imageContainer.style.display === 'block') {
+            if (imageContainer.style.display === 'flex') { // display: 'flex'に変更
                 imageContainer.style.border = '2px dashed #49a67c';
             }
         }, 300);
@@ -114,8 +112,17 @@ imageUpload.addEventListener("change", (event) => {
             const img = document.createElement('img');
             img.src = e.target.result;
             imageContainer.appendChild(img);
+            // 画像が挿入されたら説明文を非表示にする
+            if (imagePlaceholderText) {
+                imagePlaceholderText.style.display = 'none';
+            }
         };
         reader.readAsDataURL(file);
+    } else {
+        // ファイル選択がキャンセルされた場合、説明文を再表示
+        if (imageContainer.childElementCount === 0 && imagePlaceholderText) {
+             imagePlaceholderText.style.display = 'block';
+        }
     }
 });
 
@@ -127,20 +134,27 @@ function updateTemplate() {
     let layout;
     if (selectedType === "img") {
         layout = layouts[templateFileName];
+        // 画像コンテナが表示される場合、説明文を初期表示
+        if (imagePlaceholderText) {
+             imagePlaceholderText.style.display = 'block';
+        }
+        imageContainer.innerHTML = `<span class="image-placeholder-text">クリックで画像をアップロード</span>`; // 毎回リセット
     } else {
         layout = layouts[`images/background${selectedDesign}-text.png`];
         if (!layout) {
             layout = layouts["default-text"];
         }
+        // 画像コンテナが非表示になる場合、説明文も非表示にする
+        if (imagePlaceholderText) {
+             imagePlaceholderText.style.display = 'none';
+        }
     }
     
-    // スタイルを適用
     Object.assign(textContainer.style, layout.text);
     Object.assign(imageContainer.style, layout.image);
 }
 
 // --- 初期化処理 ---
-// ページ読み込み時に最初のテンプレートをアクティブにする
 if (designButtons.length > 0) {
     designButtons[0].classList.add("active");
 }
