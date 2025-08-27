@@ -1,5 +1,4 @@
 body {
-    /* フォント指定をNoto Sans JPに変更 */
     font-family: 'Noto Sans JP', sans-serif;
     display: flex;
     flex-direction: column;
@@ -73,7 +72,6 @@ textarea {
     border: 1px solid #49a67c;
     border-radius: 8px;
     box-sizing: border-box;
-    /* textareaはユーザーのOSフォントを使うことが多いので、指定は最小限に */
     font-family: inherit;
 }
 #cardPreview {
@@ -99,17 +97,15 @@ textarea {
     position: absolute;
     z-index: 1;
     overflow: hidden;
+    /* font-family, font-weight, color は残す */
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 700;
+    color: #333333;
 }
 #cardText {
     white-space: pre-wrap;
     width: 100%;
     height: 100%;
-    color: #333333;
-    /* フォントスタイルを適用 */
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 700; /* boldの代わりに700を使う */
-    font-size: 50px;
-    line-height: 98px;
 }
 #imageContainer {
     position: absolute;
