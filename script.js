@@ -79,36 +79,30 @@ imageButtons.forEach(button => {
 });
 
 downloadBtn.addEventListener("click", async () => {
-    // キャプチャ用要素を準備
     const captureElement = cardPreview.cloneNode(true);
     captureElement.id = 'capturePreview';
     
-    // キャプチャ用要素のサイズとスタイルを1200x1200に設定
     captureElement.style.width = `${DESIGN_SIZE}px`;
     captureElement.style.height = `${DESIGN_SIZE}px`;
     captureElement.style.position = 'absolute';
     captureElement.style.top = '0';
     captureElement.style.left = '0';
     
-    // キャプチャ用要素内のテキストと画像コンテナのスタイルを更新
     const captureTextContainer = captureElement.querySelector('#textContainer');
     const captureImageContainer = captureElement.querySelector('#imageContainer');
 
     const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
     
-    // テキストコンテナのスタイルを書き出し用サイズに設定
     captureTextContainer.style.top = `${layout.text.top - DOWNLOAD_TOP_OFFSET_PX}px`;
     captureTextContainer.style.left = `${layout.text.left}px`;
     captureTextContainer.style.width = `${layout.text.width}px`;
     captureTextContainer.style.height = `${layout.text.height}px`;
     captureTextContainer.style.textAlign = layout.text.textAlign;
     
-    // フォントサイズと行間も書き出し用サイズに設定
     const cardTextElement = captureTextContainer.querySelector('#cardText');
     cardTextElement.style.fontSize = '50px';
     cardTextElement.style.lineHeight = '1.96em';
 
-    // 画像コンテナのスタイルを書き出し用サイズに設定
     if (selectedType === 'img') {
         captureImageContainer.style.display = 'flex';
         captureImageContainer.style.border = layout.image.border;
@@ -120,7 +114,6 @@ downloadBtn.addEventListener("click", async () => {
         captureImageContainer.style.display = 'none';
     }
 
-    // キャプチャ用コンテナに要素を追加
     captureContainer.appendChild(captureElement);
     
     await document.fonts.ready;
@@ -136,7 +129,6 @@ downloadBtn.addEventListener("click", async () => {
         link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
         
-        // キャプチャ用要素を削除してクリーンアップ
         captureContainer.removeChild(captureElement);
         
         updateTemplate();
