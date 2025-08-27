@@ -1,171 +1,157 @@
-body {
-    font-family: "Hiragino Kaku Gothic Pro", "メイリオ", sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 50px;
-    background-color: #f4f4f9;
-    color: #333333;
-}
-h1 {
-    color: #49a67c;
-}
-.container {
-    width: 400px;
-    background-color: #fff;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-/* 新しいUIのスタイル */
-.selector {
-    display: flex;
-    justify-content: space-around;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-.selector button {
-    padding: 10px 15px;
-    background-color: #e0e0e0;
-    color: #333;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-.selector button.active {
-    background-color: #49a67c;
-    color: white;
-}
-.template-icons {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 10px;
-    margin-bottom: 15px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-}
-.template-icon {
-    flex-shrink: 0;
-    width: 50px;
-    height: 50px;
-    border: 2px solid transparent;
-    border-radius: 5px;
-    cursor: pointer;
-    object-fit: cover;
-    transition: border-color 0.3s ease;
-}
-.template-icon:hover,
-.template-icon.active {
-    border-color: #49a67c;
-}
-p {
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
-textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #49a67c;
-    border-radius: 8px;
-    box-sizing: border-box;
-}
-#generateBtn {
-    margin-top: 5px;
-    margin-bottom: 15px;
-}
-#cardPreview {
-    width: 100%;
-    margin-top: 20px; 
-    aspect-ratio: 1 / 1; 
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 10px;
-}
-#cardBackground {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    object-fit: contain; 
-}
-#textContainer {
-    position: absolute;
-    width: 80%;
-    height: 60%;
-    top: 20%;
-    left: 10%;
-    z-index: 1;
-    overflow: hidden;
-}
-#cardText {
-    white-space: pre-wrap;
-    font-size: 16px;
-    width: 100%;
-    height: 100%;
-    color: #333333;
-}
-#imageContainer {
-    position: absolute;
-    width: 60%;
-    height: 35%; /* レイアウト調整 */
-    top: 15%; /* レイアウト調整 */
-    left: 20%; /* レイアウト調整 */
-    z-index: 2;
-    overflow: hidden;
-    border: 2px dashed #49a67c;
-    display: flex; /* 説明文と画像を中央に配置するため */
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.7); /* 説明文が見やすいように半透明の背景 */
-    border-radius: 10px; /* 点線コンテナ自体も角丸に */
-}
-/* 画像コンテナ内の説明文のスタイル */
-.image-placeholder-text {
-    color: #666;
-    font-size: 14px;
-    text-align: center;
-    display: block; /* 初期表示 */
-}
-#imageContainer img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* 挿入画像を角丸にする */
-    border-radius: 10px; 
-}
-#downloadBtn {
-    margin-top: 15px;
-}
-button {
-    padding: 10px 15px;
-    cursor: pointer;
-    background-color: #49a67c;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-}
-button:hover {
-    background-color: #388e3c;
-}
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
+// --- 要素の取得 ---
+const diaryInput = document.getElementById("diaryInput");
+const cardText = document.getElementById("cardText");
+const downloadBtn = document.getElementById("downloadBtn");
+const cardBackground = document.getElementById("cardBackground");
+const cardPreview = document.getElementById("cardPreview");
+const textContainer = document.getElementById("textContainer");
+const imageContainer = document.getElementById("imageContainer");
+const imageUpload = document.getElementById("imageUpload");
+const designButtons = document.querySelectorAll(".design-select");
+const imageButtons = document.querySelectorAll(".image-select");
+const imagePlaceholderText = document.querySelector(".image-placeholder-text");
+
+// --- レイアウト設定（座標を元に再計算） ---
+// 提供された座標（1200px四方）からパーセンテージを計算
+const TEXT_TOP = (220 / 1200) * 100 + '%';
+const TEXT_LEFT = (170 / 1200) * 100 + '%';
+const TEXT_WIDTH = (860 / 1200) * 100 + '%';
+const TEXT_HEIGHT = (460 / 1200) * 100 + '%';
+const IMAGE_TOP = (720 / 1200) * 100 + '%';
+const IMAGE_LEFT = (170 / 1200) * 100 + '%';
+const IMAGE_WIDTH = (860 / 1200) * 100 + '%';
+const IMAGE_HEIGHT = (300 / 1200) * 100 + '%';
+
+const layouts = {
+    "images/background1-text.png": {
+        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        image: { display: 'none' }
+    },
+    "images/background2-text.png": {
+        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        image: { display: 'none' }
+    },
+    "images/background3-text.png": {
+        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        image: { display: 'none' }
+    },
+    "images/background4-text.png": {
+        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        image: { display: 'none' }
+    },
+    "images/background1-img.png": {
+        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
+    },
+    "images/background2-img.png": {
+        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
+    },
+    "images/background3-img.png": {
+        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
+    },
+    "images/background4-img.png": {
+        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     }
-    .container {
-        width: 100%;
-        padding: 15px;
-        box-sizing: border-box;
+};
+
+// --- 変数 ---
+let selectedDesign = "1";
+let selectedType = "text";
+
+// --- イベントリスナー ---
+diaryInput.addEventListener("input", () => {
+    cardText.textContent = diaryInput.value;
+});
+
+designButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        designButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        selectedDesign = button.getAttribute("data-design");
+        updateTemplate();
+    });
+});
+
+imageButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        imageButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        selectedType = button.getAttribute("data-type");
+        updateTemplate();
+    });
+});
+
+downloadBtn.addEventListener("click", () => {
+    cardPreview.style.border = 'none';
+    imageContainer.style.border = 'none';
+    if (imagePlaceholderText) {
+        imagePlaceholderText.style.display = 'none';
     }
+    
+    html2canvas(cardPreview, { useCORS: true, width: 1200, height: 1200 }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "ediary.png";
+        link.href = canvas.toDataURL();
+        link.click();
+        
+        setTimeout(() => {
+            cardPreview.style.border = '1px solid #ddd';
+            if (imageContainer.style.display === 'flex') {
+                imageContainer.style.border = '2px dashed #49a67c';
+                if (imageContainer.querySelector('img') === null && imagePlaceholderText) {
+                    imagePlaceholderText.style.display = 'block';
+                }
+            }
+        }, 300);
+    });
+});
+
+imageContainer.addEventListener("click", () => {
+    imageUpload.click();
+});
+
+imageUpload.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imageContainer.innerHTML = ''; 
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            imageContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// --- 関数 ---
+function updateTemplate() {
+    const templateFileName = `images/background${selectedDesign}-${selectedType}.png`;
+    cardBackground.src = templateFileName;
+    const layout = layouts[templateFileName];
+
+    // 画像ありなしの切り替えでコンテナの中身をリセット
+    if (selectedType === "img") {
+        // 画像が既にアップロードされていなければ説明文を表示
+        if (!imageContainer.querySelector('img')) {
+            imageContainer.innerHTML = `<span class="image-placeholder-text">クリックで画像をアップロード</span>`;
+        }
+    } else {
+        imageContainer.innerHTML = '';
+    }
+    
+    Object.assign(textContainer.style, layout.text);
+    Object.assign(imageContainer.style, layout.image);
 }
+
+// --- 初期化処理 ---
+if (designButtons.length > 0) {
+    designButtons[0].classList.add("active");
+}
+if (imageButtons.length > 0) {
+    imageButtons[0].classList.add("active");
+}
+updateTemplate();
