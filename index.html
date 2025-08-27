@@ -18,16 +18,24 @@
             <div id="imageContainer"></div>
             <input type="file" id="imageUpload" accept="image/*" style="display: none;">
         </div>
-        <div class="templates">
-            <img src="images/background1-text.png" data-bg="images/background1-text.png" class="template-icon">
-            <img src="images/background2-text.png" data-bg="images/background2-text.png" class="template-icon">
-            <img src="images/background3-text.png" data-bg="images/background3-text.png" class="template-icon">
-            <img src="images/background4-text.png" data-bg="images/background4-text.png" class="template-icon">
-            <img src="images/background1-img.png" data-bg="images/background1-img.png" class="template-icon">
-            <img src="images/background2-img.png" data-bg="images/background2-img.png" class="template-icon">
-            <img src="images/background3-img.png" data-bg="images/background3-img.png" class="template-icon">
-            <img src="images/background4-img.png" data-bg="images/background4-img.png" class="template-icon">
+
+        <div id="step1-design">
+            <p>1. デザインを選ぶ</p>
+            <div class="selector">
+                <button class="design-select" data-design="1">デザイン1</button>
+                <button class="design-select" data-design="2">デザイン2</button>
+                <button class="design-select" data-design="3">デザイン3</button>
+                <button class="design-select" data-design="4">デザイン4</button>
+            </div>
         </div>
+        <div id="step2-image" style="display: none;">
+            <p>2. 画像を入れる？</p>
+            <div class="selector">
+                <button class="image-select" data-type="text">なし</button>
+                <button class="image-select" data-type="img">あり</button>
+            </div>
+        </div>
+
         <button id="downloadBtn">PNGとして保存</button>
     </div>
 
