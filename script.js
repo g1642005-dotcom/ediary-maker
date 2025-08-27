@@ -20,7 +20,7 @@ const DESIGN_SIZE = 1200;
 const TOP_OFFSET_PX = 4;
 
 // テキストのみテンプレートの座標
-const TEXT_ONLY_TOP = ((200 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%';
+const TEXT_ONLY_TOP = (200 / DESIGN_SIZE) * 100 + '%';
 const TEXT_ONLY_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const TEXT_ONLY_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const TEXT_ONLY_HEIGHT = (790 / DESIGN_SIZE) * 100 + '%';
@@ -31,7 +31,7 @@ const IMAGE_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const IMAGE_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const IMAGE_HEIGHT = (460 / DESIGN_SIZE) * 100 + '%';
 
-const TEXT_WITH_IMAGE_TOP = ((720 - TOP_OFFSET_PX) / DESIGN_SIZE) * 100 + '%';
+const TEXT_WITH_IMAGE_TOP = (720 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_HEIGHT = (300 / DESIGN_SIZE) * 100 + '%';
@@ -105,23 +105,47 @@ downloadBtn.addEventListener("click", () => {
 
     // プレビューのHTMLをキャプチャ用コンテナに複製
     const previewClone = cardPreview.cloneNode(true);
+    // スタイルをリセットして、再適用
+    previewClone.style = null;
+    previewClone.id = 'capturePreview';
+    previewClone.style.width = '100%';
+    previewClone.style.height = '100%';
+    previewClone.style.border = 'none';
+
     // クローンされた要素内のスタイルを1200px基準に修正
     const cloneCardBackground = previewClone.querySelector('#cardBackground');
     cloneCardBackground.src = cardBackground.src;
     
     const cloneTextContainer = previewClone.querySelector('#textContainer');
-    Object.assign(cloneTextContainer.style, layouts[`images/background${selectedDesign}-${selectedType}.png`].text);
-    cloneTextContainer.style.top = `calc(${cloneTextContainer.style.top} - ${TOP_OFFSET_PX}px)`;
+    // ここで1200px基準のpx値を設定
+    const textTopPx = (selectedType === 'img' ? 720 : 200) - TOP_OFFSET_PX;
+    const textLeftPx = 170;
+    const textWidthPx = 860;
+    const textHeightPx = (selectedType === 'img' ? 300 : 790);
 
+    cloneTextContainer.style.top = `${textTopPx}px`;
+    cloneTextContainer.style.left = `${textLeftPx}px`;
+    cloneTextContainer.style.width = `${textWidthPx}px`;
+    cloneTextContainer.style.height = `${textHeightPx}px`;
+    
     const cloneCardText = previewClone.querySelector('#cardText');
     cloneCardText.textContent = diaryInput.value;
     cloneCardText.style.fontSize = '50px';
     cloneCardText.style.lineHeight = '98px';
-    
-    // 画像コンテナのスタイルと内容をコピー
+
     const cloneImageContainer = previewClone.querySelector('#imageContainer');
-    Object.assign(cloneImageContainer.style, layouts[`images/background${selectedDesign}-${selectedType}.png`].image);
+    // ここで1200px基準のpx値を設定
+    const imageTopPx = 220;
+    const imageLeftPx = 170;
+    const imageWidthPx = 860;
+    const imageHeightPx = 460;
+    
+    cloneImageContainer.style.top = `${imageTopPx}px`;
+    cloneImageContainer.style.left = `${imageLeftPx}px`;
+    cloneImageContainer.style.width = `${imageWidthPx}px`;
+    cloneImageContainer.style.height = `${imageHeightPx}px`;
     cloneImageContainer.style.border = 'none';
+
     if (imageContainer.querySelector('img')) {
         const img = imageContainer.querySelector('img').cloneNode();
         cloneImageContainer.innerHTML = '';
@@ -136,7 +160,7 @@ downloadBtn.addEventListener("click", () => {
     // html2canvasを非表示のコンテナに対して実行
     html2canvas(captureContainer, { 
         useCORS: true, 
-        scale: 1,
+        scale: 1
     }).then(canvas => {
         const link = document.createElement("a");
         link.download = "ediary.png";
@@ -186,15 +210,40 @@ function updateTemplate() {
         imageContainer.innerHTML = '';
     }
     
-    Object.assign(textContainer.style, layout.text);
-    Object.assign(imageContainer.style, layout.image);
-    
+    // プレビュー画面の幅を取得
     const previewWidth = cardPreview.offsetWidth;
+    const previewHeight = cardPreview.offsetHeight;
+    
+    // px単位での位置とサイズを計算
+    const textTopPx = (selectedType === 'img' ? 720 : 200) - TOP_OFFSET_PX;
+    const textLeftPx = 170;
+    const textWidthPx = 860;
+    const textHeightPx = (selectedType === 'img' ? 300 : 790);
+
+    // プレビューのサイズに合わせて%に変換して適用
+    textContainer.style.top = `${(textTopPx / DESIGN_SIZE) * 100}%`;
+    textContainer.style.left = `${(textLeftPx / DESIGN_SIZE) * 100}%`;
+    textContainer.style.width = `${(textWidthPx / DESIGN_SIZE) * 100}%`;
+    textContainer.style.height = `${(textHeightPx / DESIGN_SIZE) * 100}%`;
+    
+    // プレビュー画面の幅に合わせてフォントサイズと行間を再計算
     const newFontSize = (50 / DESIGN_SIZE) * previewWidth;
     const newLineHeight = (98 / 50);
     
     cardText.style.fontSize = newFontSize + 'px';
     cardText.style.lineHeight = newLineHeight + 'em';
+    
+    // 画像コンテナの位置も同様に計算
+    if (selectedType === 'img') {
+        const imageTopPx = 220;
+        const imageLeftPx = 170;
+        const imageWidthPx = 860;
+        const imageHeightPx = 460;
+        imageContainer.style.top = `${(imageTopPx / DESIGN_SIZE) * 100}%`;
+        imageContainer.style.left = `${(imageLeftPx / DESIGN_SIZE) * 100}%`;
+        imageContainer.style.width = `${(imageWidthPx / DESIGN_SIZE) * 100}%`;
+        imageContainer.style.height = `${(imageHeightPx / DESIGN_SIZE) * 100}%`;
+    }
 }
 
 // --- 初期化処理 ---
