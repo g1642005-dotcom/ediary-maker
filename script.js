@@ -12,6 +12,7 @@ const imageButtons = document.querySelectorAll(".image-select");
 const imagePlaceholderText = document.querySelector(".image-placeholder-text");
 
 // --- レイアウト設定（座標を元に再計算） ---
+// 1200px基準のデザインサイズ
 const DESIGN_SIZE = 1200;
 
 // テキストのみテンプレートの座標
@@ -33,35 +34,59 @@ const TEXT_WITH_IMAGE_HEIGHT = (300 / DESIGN_SIZE) * 100 + '%';
 
 const layouts = {
     "images/background1-text.png": {
-        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
+        text: { 
+            top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
+            textAlign: 'left'
+        },
         image: { display: 'none' }
     },
     "images/background2-text.png": {
-        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
+        text: { 
+            top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
+            textAlign: 'left'
+        },
         image: { display: 'none' }
     },
     "images/background3-text.png": {
-        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
+        text: { 
+            top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
+            textAlign: 'left'
+        },
         image: { display: 'none' }
     },
     "images/background4-text.png": {
-        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
+        text: { 
+            top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
+            textAlign: 'left'
+        },
         image: { display: 'none' }
     },
     "images/background1-img.png": {
-        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
+        text: { 
+            top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
+            textAlign: 'left'
+        },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background2-img.png": {
-        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
+        text: { 
+            top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
+            textAlign: 'left'
+        },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background3-img.png": {
-        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
+        text: { 
+            top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
+            textAlign: 'left'
+        },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background4-img.png": {
-        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
+        text: { 
+            top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
+            textAlign: 'left'
+        },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     }
 };
@@ -100,7 +125,7 @@ downloadBtn.addEventListener("click", () => {
         imagePlaceholderText.style.display = 'none';
     }
     
-    // 一時的にスタイルを変更
+    // PNG書き出し用のフォントサイズと行間を一時的に設定
     cardText.style.fontSize = '50px';
     cardText.style.lineHeight = '98px';
     
@@ -113,9 +138,8 @@ downloadBtn.addEventListener("click", () => {
         link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
         
-        // スタイルを元に戻す
-        cardText.style.fontSize = '';
-        cardText.style.lineHeight = '';
+        // 元のプレビュー用のスタイルに戻す
+        updateTemplate();
 
         setTimeout(() => {
             cardPreview.style.border = '1px solid #ddd';
@@ -164,9 +188,13 @@ function updateTemplate() {
     Object.assign(textContainer.style, layout.text);
     Object.assign(imageContainer.style, layout.image);
     
-    // フォントサイズと行間を動的に設定
-    cardText.style.fontSize = (50 / cardPreview.offsetWidth) * cardPreview.offsetWidth + 'px';
-    cardText.style.lineHeight = (98 / 50) + 'em';
+    // プレビュー画面の幅に合わせてフォントサイズと行間を再計算
+    const previewWidth = cardPreview.offsetWidth;
+    const newFontSize = (50 / 1200) * previewWidth;
+    const newLineHeight = (98 / 50);
+    
+    cardText.style.fontSize = newFontSize + 'px';
+    cardText.style.lineHeight = newLineHeight + 'em';
 }
 
 // --- 初期化処理 ---
