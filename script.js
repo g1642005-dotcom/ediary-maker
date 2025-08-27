@@ -16,9 +16,9 @@ const captureContainer = document.getElementById("captureContainer");
 const DESIGN_SIZE = 1200;
 
 // プレビュー用オフセット
-const PREVIEW_TOP_OFFSET_PX = 20; // ここを20pxに設定
+const PREVIEW_TOP_OFFSET_PX = 30; // ここを20pxに設定
 // 書き出し用オフセット
-const DOWNLOAD_TOP_OFFSET_PX = 6; // ここを6pxに設定
+const DOWNLOAD_TOP_OFFSET_PX = 10; // ここを6pxに設定
 
 const layouts = {
     "images/background1-text.png": {
