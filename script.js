@@ -16,9 +16,9 @@ const captureContainer = document.getElementById("captureContainer");
 const DESIGN_SIZE = 1200;
 
 // プレビュー用オフセット
-const PREVIEW_TOP_OFFSET_PX = 30; // ここを30pxに設定
+const PREVIEW_TOP_OFFSET_PX = 30;
 // 書き出し用オフセット
-const DOWNLOAD_TOP_OFFSET_PX = 10; // ここを10pxに設定
+const DOWNLOAD_TOP_OFFSET_PX = 10;
 
 const layouts = {
     "images/background1-text.png": {
@@ -61,7 +61,46 @@ let selectedType = "text";
 
 // --- イベントリスナー ---
 diaryInput.addEventListener("input", () => {
-    cardText.textContent = diaryInput.value;
+    let lines = diaryInput.value.split('\n');
+    let newText = '';
+    let truncated = false;
+    
+    let maxLines = 0;
+    let maxCharsPerLine = 0;
+    
+    // 💡 選択されたタイプに基づいて文字数・行数制限を動的に変更
+    if (selectedType === 'text') {
+        maxLines = 8;
+        maxCharsPerLine = 17;
+    } else if (selectedType === 'img') {
+        maxLines = 3;
+        maxCharsPerLine = 17;
+    }
+
+    // 行数制限
+    if (lines.length > maxLines) {
+        lines = lines.slice(0, maxLines);
+        truncated = true;
+    }
+    
+    // 文字数制限
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].length > maxCharsPerLine) {
+            lines[i] = lines[i].substring(0, maxCharsPerLine);
+            truncated = true;
+        }
+    }
+    
+    newText = lines.join('\n');
+    
+    if (truncated) {
+        // 制限を超えた場合、入力を修正
+        diaryInput.value = newText;
+        // 警告メッセージ（任意）
+        console.warn(`入力できるのは1行${maxCharsPerLine}文字、${maxLines}行までです。`);
+    }
+    
+    cardText.textContent = newText;
 });
 
 designButtons.forEach(button => {
