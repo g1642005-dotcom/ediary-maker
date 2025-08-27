@@ -12,46 +12,54 @@ const imageButtons = document.querySelectorAll(".image-select");
 const imagePlaceholderText = document.querySelector(".image-placeholder-text");
 
 // --- レイアウト設定（座標を元に再計算） ---
-const TEXT_TOP = (220 / 1200) * 100 + '%';
-const TEXT_LEFT = (170 / 1200) * 100 + '%';
-const TEXT_WIDTH = (860 / 1200) * 100 + '%';
-const TEXT_HEIGHT = (460 / 1200) * 100 + '%';
-const IMAGE_TOP = (720 / 1200) * 100 + '%';
+// テキストのみテンプレートの座標
+const TEXT_ONLY_TOP = (200 / 1200) * 100 + '%';
+const TEXT_ONLY_LEFT = (170 / 1200) * 100 + '%';
+const TEXT_ONLY_WIDTH = (860 / 1200) * 100 + '%';
+const TEXT_ONLY_HEIGHT = (790 / 1200) * 100 + '%';
+
+// 画像ありテンプレートの座標
+const IMAGE_TOP = (220 / 1200) * 100 + '%';
 const IMAGE_LEFT = (170 / 1200) * 100 + '%';
 const IMAGE_WIDTH = (860 / 1200) * 100 + '%';
-const IMAGE_HEIGHT = (300 / 1200) * 100 + '%';
+const IMAGE_HEIGHT = (460 / 1200) * 100 + '%';
+
+const TEXT_WITH_IMAGE_TOP = (720 / 1200) * 100 + '%';
+const TEXT_WITH_IMAGE_LEFT = (170 / 1200) * 100 + '%';
+const TEXT_WITH_IMAGE_WIDTH = (860 / 1200) * 100 + '%';
+const TEXT_WITH_IMAGE_HEIGHT = (300 / 1200) * 100 + '%';
 
 const layouts = {
     "images/background1-text.png": {
-        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background2-text.png": {
-        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background3-text.png": {
-        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background4-text.png": {
-        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        text: { top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, textAlign: 'left' },
         image: { display: 'none' }
     },
     "images/background1-img.png": {
-        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background2-img.png": {
-        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background3-img.png": {
-        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background4-img.png": {
-        text: { top: TEXT_TOP, left: TEXT_LEFT, width: TEXT_WIDTH, height: TEXT_HEIGHT, textAlign: 'left' },
+        text: { top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, textAlign: 'left' },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     }
 };
