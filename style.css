@@ -37,10 +37,9 @@ h1 {
     color: white;
 }
 
-/* デザインアイコンのサイズ調整 */
 .template-icons {
     display: flex;
-    justify-content: space-between; /* 均等な間隔で配置 */
+    justify-content: space-between;
     flex-wrap: nowrap;
     gap: 10px;
     margin-bottom: 15px;
@@ -49,7 +48,7 @@ h1 {
 }
 .template-icon {
     flex-shrink: 0;
-    width: calc(25% - 7.5px); /* 親要素の幅に合わせて4つ並ぶように調整 */
+    width: calc(25% - 7.5px);
     height: auto;
     border: 2px solid transparent;
     border-radius: 5px;
@@ -139,9 +138,8 @@ textarea {
     border-radius: 10px;
 }
 
-/* 主要ボタンのサイズとスタイル調整 */
 .primary-btn {
-    padding: 12px 20px; /* 少し大きくする */
+    padding: 12px 20px;
     margin: 15px 0;
     cursor: pointer;
     background-color: #49a67c;
@@ -154,7 +152,7 @@ textarea {
 }
 .primary-btn:hover {
     background-color: #388e3c;
-    transform: translateY(-2px); /* 少し浮き上がるエフェクト */
+    transform: translateY(-2px);
 }
 @media (max-width: 480px) {
     body {
