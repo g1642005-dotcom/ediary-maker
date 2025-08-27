@@ -32,64 +32,60 @@ const TEXT_WITH_IMAGE_LEFT = (170 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_WIDTH = (860 / DESIGN_SIZE) * 100 + '%';
 const TEXT_WITH_IMAGE_HEIGHT = (300 / DESIGN_SIZE) * 100 + '%';
 
-// フォントと行間のパーセンテージ計算
-const FONT_SIZE_PERCENT = (50 / DESIGN_SIZE) * 100 + 'vh';
-const LINE_HEIGHT_PERCENT = (98 / 50) + 'em'; // font-sizeに対するem単位
-
 const layouts = {
     "images/background1-text.png": {
         text: { 
             top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
-            textAlign: 'left', fontSize: FONT_SIZE_PERCENT, lineHeight: LINE_HEIGHT_PERCENT
+            textAlign: 'left'
         },
         image: { display: 'none' }
     },
     "images/background2-text.png": {
         text: { 
             top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
-            textAlign: 'left', fontSize: FONT_SIZE_PERCENT, lineHeight: LINE_HEIGHT_PERCENT
+            textAlign: 'left'
         },
         image: { display: 'none' }
     },
     "images/background3-text.png": {
         text: { 
             top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
-            textAlign: 'left', fontSize: FONT_SIZE_PERCENT, lineHeight: LINE_HEIGHT_PERCENT
+            textAlign: 'left'
         },
         image: { display: 'none' }
     },
     "images/background4-text.png": {
         text: { 
             top: TEXT_ONLY_TOP, left: TEXT_ONLY_LEFT, width: TEXT_ONLY_WIDTH, height: TEXT_ONLY_HEIGHT, 
-            textAlign: 'left', fontSize: FONT_SIZE_PERCENT, lineHeight: LINE_HEIGHT_PERCENT
+            textAlign: 'left'
         },
         image: { display: 'none' }
     },
     "images/background1-img.png": {
         text: { 
             top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
-            textAlign: 'left', fontSize: FONT_SIZE_PERCENT, lineHeight: LINE_HEIGHT_PERCENT
+            textAlign: 'left'
         },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background2-img.png": {
         text: { 
             top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
-            textAlign: 'left', fontSize: FONT_SIZE_PERCENT, lineHeight: LINE_HEIGHT_PERCENT
+            textAlign: 'left'
         },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background3-img.png": {
         text: { 
             top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
-            textAlign: 'left', fontSize: FONT_SIZE_PERCENT, lineHeight: LINE_HEIGHT_PERCENT
+            textAlign: 'left'
         },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     },
     "images/background4-img.png": {
         text: { 
             top: TEXT_WITH_IMAGE_TOP, left: TEXT_WITH_IMAGE_LEFT, width: TEXT_WITH_IMAGE_WIDTH, height: TEXT_WITH_IMAGE_HEIGHT, 
-            textAlign: 'left', fontSize: FONT_SIZE_PERCENT, lineHeight: LINE_HEIGHT_PERCENT
+            textAlign: 'left'
         },
         image: { display: 'flex', top: IMAGE_TOP, left: IMAGE_LEFT, width: IMAGE_WIDTH, height: IMAGE_HEIGHT, border: '2px dashed #49a67c' }
     }
@@ -129,16 +125,13 @@ downloadBtn.addEventListener("click", () => {
         imagePlaceholderText.style.display = 'none';
     }
     
-    // html2canvasにスケールオプションを追加
     html2canvas(cardPreview, { 
         useCORS: true, 
-        width: 1200, 
-        height: 1200, 
-        scale: 1 
+        scale: 1200 / cardPreview.offsetWidth
     }).then(canvas => {
         const link = document.createElement("a");
         link.download = "ediary.png";
-        link.href = canvas.toDataURL();
+        link.href = canvas.toDataURL("image/png", 1.0);
         link.click();
         
         setTimeout(() => {
