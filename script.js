@@ -64,14 +64,11 @@ diaryInput.addEventListener("input", () => {
     let inputText = diaryInput.value;
     let lines = inputText.split('\n');
     let maxLines = 0;
-    let maxCharsPerLine = 0;
     
     if (selectedType === 'text') {
         maxLines = 8;
-        maxCharsPerLine = 17;
     } else if (selectedType === 'img') {
         maxLines = 3;
-        maxCharsPerLine = 17;
     }
 
     wordCountMessage.textContent = '';
@@ -80,27 +77,35 @@ diaryInput.addEventListener("input", () => {
     // 行数制限のチェック
     if (lines.length > maxLines) {
         lineCountMessage.textContent = `最大${maxLines}行まで入力できます`;
-        diaryInput.value = lines.slice(0, maxLines).join('\n');
+        lines = lines.slice(0, maxLines);
+        inputText = lines.join('\n');
+        diaryInput.value = inputText;
     }
+
+    // 1行17文字以上の部分を自動で改行
+    let newText = '';
+    let currentLine = '';
     
-    // 各行の文字数制限のチェック
-    let truncatedLines = [];
-    let isTruncated = false;
-    for (let i = 0; i < lines.length; i++) {
-        if (lines[i].length > maxCharsPerLine) {
-            wordCountMessage.textContent = `1行は${maxCharsPerLine}文字までです`;
-            truncatedLines.push(lines[i].substring(0, maxCharsPerLine));
-            isTruncated = true;
-        } else {
-            truncatedLines.push(lines[i]);
+    for(let i = 0; i < inputText.length; i++) {
+        currentLine += inputText[i];
+        if (currentLine.length >= 17 && inputText[i] !== '\n') {
+            newText += currentLine + '\n';
+            currentLine = '';
         }
     }
     
-    if (isTruncated) {
-        diaryInput.value = truncatedLines.join('\n');
+    newText += currentLine;
+
+    // 行数制限の再チェック
+    let finalLines = newText.split('\n');
+    if (finalLines.length > maxLines) {
+        finalLines = finalLines.slice(0, maxLines);
+        newText = finalLines.join('\n');
+        lineCountMessage.textContent = `最大${maxLines}行まで入力できます`;
     }
     
-    cardText.textContent = diaryInput.value;
+    diaryInput.value = newText;
+    cardText.textContent = newText;
 });
 
 designButtons.forEach(button => {
@@ -177,7 +182,7 @@ downloadBtn.addEventListener("click", async () => {
     });
 });
 
-imageContainer.addEventListener("click", () => {
+imageContainer.addEventListener("click", () to {
     imageUpload.click();
 });
 
