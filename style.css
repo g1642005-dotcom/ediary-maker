@@ -1,11 +1,10 @@
-/* 新しい選択ボタンのスタイル */
+/* 新しいUIのスタイル */
 .selector {
     display: flex;
     justify-content: space-around;
     gap: 10px;
     margin-bottom: 20px;
 }
-
 .selector button {
     padding: 10px 15px;
     background-color: #e0e0e0;
@@ -15,17 +14,33 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
-.selector button:hover {
-    background-color: #d0d0d0;
-}
-
 .selector button.active {
     background-color: #49a67c;
     color: white;
 }
+.template-icons {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+.template-icon {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    object-fit: cover;
+    transition: border-color 0.3s ease;
+}
+.template-icon:hover,
+.template-icon.active {
+    border-color: #49a67c;
+}
 /* ----------------------------------- */
-
 body {
     font-family: "Hiragino Kaku Gothic Pro", "メイリオ", sans-serif;
     display: flex;
@@ -121,28 +136,6 @@ button {
 }
 button:hover {
     background-color: #388e3c;
-}
-.templates {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 10px;
-    margin-bottom: 15px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-}
-.template-icon {
-    flex-shrink: 0;
-    width: 50px;
-    height: 50px;
-    border: 2px solid transparent;
-    border-radius: 5px;
-    cursor: pointer;
-    object-fit: cover;
-    transition: border-color 0.3s ease;
-}
-.template-icon:hover,
-.template-icon.active {
-    border-color: #49a67c;
 }
 @media (max-width: 480px) {
     body {
