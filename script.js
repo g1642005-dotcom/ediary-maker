@@ -16,7 +16,7 @@ const captureContainer = document.getElementById("captureContainer");
 // 1200px基準のデザインサイズ
 const DESIGN_SIZE = 1200;
 
-// テキスト位置を4pxから100pxに調整
+// テキスト位置を100px上に調整
 const TOP_OFFSET_PX = 100;
 
 // すべてのレイアウトをpx単位で定義
@@ -82,7 +82,10 @@ imageButtons.forEach(button => {
     });
 });
 
-downloadBtn.addEventListener("click", () => {
+downloadBtn.addEventListener("click", async () => {
+    // フォントの読み込みを待つ
+    await document.fonts.ready;
+    
     // キャプチャ用コンテナの準備
     captureContainer.style.width = `${DESIGN_SIZE}px`;
     captureContainer.style.height = `${DESIGN_SIZE}px`;
@@ -102,13 +105,11 @@ downloadBtn.addEventListener("click", () => {
     const layout = layouts[`images/background${selectedDesign}-${selectedType}.png`];
 
     // 1200px基準の絶対位置を直接適用
-    cloneTextContainer.style.top = `${layout.text.top}px`;
+    cloneTextContainer.style.top = `${layout.text.top - TOP_OFFSET_PX}px`;
     cloneTextContainer.style.left = `${layout.text.left}px`;
     cloneTextContainer.style.width = `${layout.text.width}px`;
     cloneTextContainer.style.height = `${layout.text.height}px`;
     cloneTextContainer.style.textAlign = layout.text.textAlign;
-    // transformを適用
-    cloneTextContainer.style.transform = `translateY(-${TOP_OFFSET_PX}px)`;
 
     const cloneCardText = previewClone.querySelector('#cardText');
     cloneCardText.textContent = diaryInput.value;
