@@ -32,8 +32,6 @@
 
         <p>3. 日記を書く</p>
         <textarea id="diaryInput" placeholder="ここに今日の出来事を書いてね"></textarea>
-        <p id="wordCountMessage" class="message"></p>
-        <p id="lineCountMessage" class="message"></p>
 
         <div id="cardPreview">
             <img id="cardBackground" src="images/background1-text.png" alt="背景画像">
@@ -48,6 +46,8 @@
 
         <button id="downloadBtn" class="primary-btn">PNGとして保存</button>
     </div>
+
+    <div id="captureContainer"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="script.js"></script>
