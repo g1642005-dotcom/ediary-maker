@@ -52,7 +52,7 @@ h1 {
     border: 2px solid transparent;
     border-radius: 5px;
     cursor: pointer;
-    object-fit: contain; 
+    object-fit: contain;
     transition: border-color 0.3s ease;
 }
 .template-icon:hover,
@@ -76,8 +76,8 @@ textarea {
 }
 #cardPreview {
     width: 100%;
-    margin-top: 20px; 
-    aspect-ratio: 1 / 1; 
+    margin-top: 20px;
+    aspect-ratio: 1 / 1;
     border: 1px solid #ddd;
     border-radius: 10px;
     position: relative;
@@ -91,7 +91,7 @@ textarea {
     top: 0;
     left: 0;
     z-index: 0;
-    object-fit: contain; 
+    object-fit: contain;
 }
 #textContainer {
     position: absolute;
@@ -147,9 +147,12 @@ textarea {
     transform: translateY(-2px);
 }
 #captureContainer {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
 }
 @media (max-width: 480px) {
     body {
